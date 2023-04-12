@@ -1,0 +1,560 @@
+﻿<Window x:Class="CustomHotKey.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CustomHotKey"
+        xmlns:m="clr-namespace:CustomHotKey.Models"
+        xmlns:vm="clr-namespace:CustomHotKey.ViewModels"
+        xmlns:s="clr-namespace:System.Windows;assembly=PresentationFramework"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        mc:Ignorable="d"
+        Title="{Binding Lang.title_window}" Height="500" Width="800" MinHeight="480" MinWidth="700" 
+        TextOptions.TextFormattingMode="Display"
+        UseLayoutRounding="True"
+        Foreground="{DynamicResource Window.DefaultForeground}"
+        Background="{DynamicResource Window.DefaultBackground}">
+
+    <Window.InputBindings>
+        <KeyBinding Gesture="Delete"  Key="Delete"  Command="{Binding DeleteFileItem}"/>
+        <KeyBinding Gesture="F2" Key="F2" Command="{Binding RenameFileItem}"/>
+    </Window.InputBindings>
+    <Window.Resources>
+        <Style TargetType="Menu">
+            <Setter Property="Background" Value="{DynamicResource Control.DefaultBackground}" />
+        </Style>
+    </Window.Resources>
+    <Window.DataContext>
+        <vm:MainWindowViewModel x:Name="mwvm"/>
+    </Window.DataContext>
+    <Window.Style>
+        <Style TargetType="Window">
+            <Setter Property="WindowChrome.WindowChrome">
+                <Setter.Value>
+                    <WindowChrome 
+                        CornerRadius="0" 
+                        CaptionHeight="32" 
+                        GlassFrameThickness="-1" 
+                        UseAeroCaptionButtons="True" 
+                        NonClientFrameEdges="None"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Window">
+                        <Grid x:Name="content">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0" x:Name="titleBarStyle" Background="{DynamicResource Window.DefaultBackground}">
+
+                                <Rectangle x:Name="focuRect">
+                                    <Rectangle.Fill>
+                                        <LinearGradientBrush StartPoint="0.5, 0" EndPoint="0.5, 1">
+                                            <GradientStop Offset="0" Color="Transparent"/>
+                                            <GradientStop Offset="1" Color="{x:Static vm:UserThemeColor.ThemeColor}"/>
+                                        </LinearGradientBrush>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+
+                                <Path Stroke="{DynamicResource Control.DefaultBorderBrush}" StrokeThickness="2"
+                                      Fill="{DynamicResource Control.DefaultBackground}"
+                                      Data="M 256, 0 L 256, 32 L 0, 32 L 0, 24 L 48, 8 L 48, 0 Z" 
+                                      Width="256" HorizontalAlignment="Right">
+                                    <Path.Effect>
+                                        <DropShadowEffect ShadowDepth="0" Color="Black" BlurRadius="10"/>
+                                    </Path.Effect>
+                                </Path>
+
+                                <Path Stroke="{DynamicResource Control.DefaultBorderBrush}" StrokeThickness="2" 
+                                      Fill="{DynamicResource Control.DefaultBackground}" 
+                                      Data="M 0, 0 L 256, 0 L 256, 8 L 208, 24 L 208, 32 L 0, 32 Z" 
+                                      Width="256" HorizontalAlignment="Left">
+                                    <Path.Effect>
+                                        <DropShadowEffect ShadowDepth="0" Color="Black" BlurRadius="10"/>
+                                    </Path.Effect>
+                                </Path>
+
+                                <Image Width="20" 
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       Margin="10, 0"
+                                       Source="\Resources\Icon\programIcon.ico"/>
+
+                                <TextBlock Text="{Binding Lang.title_window}" 
+                                           Margin="40, 0" FontSize="16"
+                                           VerticalAlignment="Center"/>
+                                
+                                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                                    <StackPanel.Effect>
+                                        <DropShadowEffect Color="Black" ShadowDepth="2" BlurRadius="24" Direction="0"/>
+                                    </StackPanel.Effect>
+                                    <Button x:Name="min" Width="44" Height="28" Margin="4, 2, 0, 2" 
+                                            WindowChrome.IsHitTestVisibleInChrome="True" 
+                                            Command="{x:Static s:SystemCommands.MinimizeWindowCommand}">
+                                        <Button.Content>
+                                            <Rectangle Width="12" Height="2">
+                                                <Rectangle.Fill>
+                                                    <DrawingBrush>
+                                                        <DrawingBrush.Drawing>
+                                                            <GeometryDrawing 
+                                                Brush="{DynamicResource Control.DefaultForeground}" 
+                                                Geometry="{StaticResource min}"/>
+                                                        </DrawingBrush.Drawing>
+                                                    </DrawingBrush>
+                                                </Rectangle.Fill>
+                                            </Rectangle>
+                                        </Button.Content>
+                                    </Button>
+                                    <Button x:Name="max" Width="44" Height="28" Margin="4, 2, 0, 2" 
+                                            WindowChrome.IsHitTestVisibleInChrome="True" 
+                                            Command="{x:Static s:SystemCommands.MaximizeWindowCommand}">
+                                        <Button.Content>
+                                            <Rectangle Width="12" Height="12">
+                                                <Rectangle.Fill>
+                                                    <DrawingBrush>
+                                                        <DrawingBrush.Drawing>
+                                                            <GeometryDrawing 
+                                                Brush="{DynamicResource Control.DefaultForeground}" 
+                                                Geometry="{StaticResource max}"/>
+                                                        </DrawingBrush.Drawing>
+                                                    </DrawingBrush>
+                                                </Rectangle.Fill>
+                                            </Rectangle>
+                                        </Button.Content>
+                                    </Button>
+                                    <Button x:Name="close" Width="44" Height="28" Margin="4, 2, 8, 2" 
+                                            WindowChrome.IsHitTestVisibleInChrome="True"
+                                            Command="{x:Static s:SystemCommands.CloseWindowCommand}">
+                                        <Button.Content>
+                                            <Rectangle Width="12" Height="12">
+                                                <Rectangle.Fill>
+                                                    <DrawingBrush>
+                                                        <DrawingBrush.Drawing>
+                                                            <GeometryDrawing 
+                                                Brush="{DynamicResource Control.DefaultForeground}" 
+                                                Geometry="{StaticResource close}"/>
+                                                        </DrawingBrush.Drawing>
+                                                    </DrawingBrush>
+                                                </Rectangle.Fill>
+                                            </Rectangle>
+                                        </Button.Content>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+                            <Grid x:Name="Content_Panel" Grid.Row="1" Background="{TemplateBinding Background}">
+                                <AdornerDecorator>
+                                    <ContentPresenter/>
+                                </AdornerDecorator>
+                            </Grid>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="WindowState" Value="Maximized">
+                                <Setter TargetName="max" Property="Content">
+                                    <Setter.Value>
+                                        <Rectangle Width="12" Height="12">
+                                            <Rectangle.Fill>
+                                                <DrawingBrush>
+                                                    <DrawingBrush.Drawing>
+                                                        <GeometryDrawing 
+                                                            Brush="{DynamicResource 
+                                                                Control.DefaultForeground}" 
+                                                            Geometry="{StaticResource restore}"/>
+                                                    </DrawingBrush.Drawing>
+                                                </DrawingBrush>
+                                            </Rectangle.Fill>
+                                        </Rectangle>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="max" Property="Command" Value="{x:Static s:SystemCommands.RestoreWindowCommand}"/>
+                                <Setter TargetName="Content_Panel" Property="Margin" Value="7, 0, 7, 7"/>
+                                <Setter TargetName="titleBarStyle" Property="Margin" Value="7, 7, 7, 0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Style>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" MinWidth="200" MaxWidth="280"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition MinWidth="500"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Menu Grid.ColumnSpan="3" VerticalAlignment="Center">
+            <MenuItem Header="{Binding Lang.menu_file}">
+                <MenuItem Header="{Binding Lang.menu_select_directory}" Command="{Binding SelectFileViewPath}"/>
+                <MenuItem Header="{Binding Lang.menu_add}">
+                    <MenuItem Header="{Binding Lang.menu_file}" Command="{Binding AddFile}"/>
+                    <MenuItem Header="{Binding Lang.menu_folder}" Command="{Binding AddFolder}"/>
+                </MenuItem>
+                <MenuItem Header="{Binding Lang.menu_delete}" Command="{Binding DeleteFileItem}"/>
+                <MenuItem Header="{Binding Lang.menu_rename}" Command="{Binding RenameFileItem}"/>
+            </MenuItem>
+        </Menu>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="2" Margin="8, 0">
+            <TextBlock Text="{Binding Lang.text_language}" Margin="8, 0" VerticalAlignment="Center"/>
+            <ComboBox SelectedValue="{Binding SelectedLanguageName}" ItemsSource="{Binding LanguageNames}"/>
+
+            <TextBlock Text="{Binding Lang.text_theme}" Margin="8, 0" VerticalAlignment="Center"/>
+            <ComboBox SelectedValue="{Binding Theme}" ItemsSource="{Binding ThemeNames}"/>
+        </StackPanel>
+
+        <GridSplitter ResizeDirection="Columns" Grid.Column="1" Grid.Row="1" Width="6" 
+                      HorizontalAlignment="Stretch"
+                      Background="{DynamicResource Control.DefaultBackground}" 
+                      BorderThickness="2"
+                      BorderBrush="{DynamicResource Control.DefaultBorderBrush}" Margin="-1, 20"/>
+        <Grid Margin="4, 0, 0, 4" Grid.Row="1">
+            <GroupBox x:Name="FileView" Header="{Binding Lang.title_file_view}">
+                <Grid>
+                    <TreeView x:Name="FileViewTree" Width="Auto"
+                              ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                              SelectedItemChanged="FileViewTree_SelectedItemChanged"
+                              ItemsSource="{Binding Files}">
+                        <TreeView.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="{Binding Lang.menu_add}">
+                                    <MenuItem Header="{Binding Lang.menu_file}" Command="{Binding AddFile}"/>
+                                    <MenuItem Header="{Binding Lang.menu_folder}" Command="{Binding AddFolder}"/>
+                                </MenuItem>
+                                <Separator/>
+                                <MenuItem Header="{Binding Lang.menu_delete}" Command="{Binding DeleteFileItem}"/>
+                                <MenuItem Header="{Binding Lang.menu_rename}" Command="{Binding RenameFileItem}"/>
+                            </ContextMenu>
+                        </TreeView.ContextMenu>
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Directories}">
+                                <Border CornerRadius="2"
+                                    BorderBrush="{DynamicResource Control.DefaultBorderBrush}" BorderThickness="0, 0, 0, 2">
+                                    <StackPanel Orientation="Horizontal" MinWidth="150" Width="Auto">
+                                        <StackPanel.Resources>
+                                            <Style TargetType="Rectangle" x:Key="RectangleIcon">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Type}" Value="0">
+                                                        <Setter Property="Fill">
+                                                            <Setter.Value>
+                                                                <DrawingBrush>
+                                                                    <DrawingBrush.Drawing>
+                                                                        <GeometryDrawing 
+                                                                            Brush="{DynamicResource Control.DefaultForeground}"
+                                                                            Geometry="{StaticResource folder}"/>
+                                                                    </DrawingBrush.Drawing>
+                                                                </DrawingBrush>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                    <DataTrigger 
+                                                        Binding="{Binding Path=IsExpanded, RelativeSource={RelativeSource AncestorType=TreeViewItem}}" 
+                                                        Value="True">
+                                                        <Setter Property="Fill">
+                                                            <Setter.Value>
+                                                                <DrawingBrush>
+                                                                    <DrawingBrush.Drawing>
+                                                                        <GeometryDrawing 
+                                                                            Brush="{DynamicResource Control.DefaultForeground}"
+                                                                            Geometry="{StaticResource folder-open}"/>
+                                                                    </DrawingBrush.Drawing>
+                                                                </DrawingBrush>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Type}" Value="1">
+                                                        <Setter Property="Fill" Value="{Binding IconBrush}"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </StackPanel.Resources>
+                                        <Rectangle Width="16" Height="16" 
+                                                   Margin="2, 0"
+                                                   x:Name="rect"
+                                                   Style="{StaticResource RectangleIcon}"
+                                                   VerticalAlignment="Center"/>
+                                        <TextBlock Text="{Binding Name}" FontSize="12"/>
+                                    </StackPanel>
+                                </Border>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                    <Grid Grid.Row="1" Grid.Column="0" Margin="6, 0, 6, 6" 
+                      Height="Auto" VerticalAlignment="Bottom">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="20"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Border BorderBrush="{DynamicResource Control.DefaultBorderBrush}"
+                                Background="{DynamicResource Control.DisabledBackground}"
+                                CornerRadius="2"
+                                BorderThickness="1" Height="26" Margin="0, 0, 2, 24">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="5" Direction="-45" ShadowDepth="3" Color="Black"/>
+                            </Border.Effect>
+                            <TextBlock
+                            x:Name="FileViewPathTextBlock"
+                            Padding="6, 0"
+                            VerticalAlignment="Center"
+                            TextTrimming="CharacterEllipsis"
+                            Text="{Binding FileViewPath}"
+                            Foreground="{DynamicResource Control.DefaultForeground}"/>
+                        </Border>
+                        <Button x:Name="SelectFileViewPathButton" Height="26" VerticalAlignment="Top"
+                                Grid.Column="1" Command="{Binding SelectFileViewPath}">
+                            <Button.Content>
+                                <Rectangle Height="12" Width="12">
+                                    <Rectangle.Fill>
+                                        <DrawingBrush>
+                                            <DrawingBrush.Drawing>
+                                                <GeometryDrawing 
+                                                    Brush="{DynamicResource Control.DefaultForeground}" 
+                                                    Geometry="{StaticResource folder}"/>
+                                            </DrawingBrush.Drawing>
+                                        </DrawingBrush>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                            </Button.Content>
+                        </Button>
+                    </Grid>
+                </Grid>
+            </GroupBox>
+        </Grid>
+        <Grid Grid.Row="1" Grid.Column="2" Margin="0, 0, 4, 4">
+            <GroupBox x:Name="EditView" Header="{Binding Lang.title_edit_view, ElementName=mwvm}"
+              DataContext="{Binding SelectedHotKey}">
+                <Grid Margin="3">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="140"/>
+                    </Grid.RowDefinitions>
+                    <Border BorderBrush="{DynamicResource Window.DefaultBorderBrush}" BorderThickness="1" 
+                            Height="36" VerticalAlignment="Top" CornerRadius="3">
+                        <DockPanel x:Name="EditViewTitleBar">
+                            <DockPanel.Resources>
+                                <Style x:Key="OpenState" TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Open}" Value="false">
+                                            <Setter Property="Text" 
+                                                    Value="{Binding Lang.edit_view_is_not_open, ElementName=mwvm}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Open}" Value="true">
+                                            <Setter Property="Text" 
+                                                    Value="{Binding Lang.edit_view_is_open, ElementName=mwvm}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                                <Style x:Key="OpenStateE" TargetType="Ellipse">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Open}" Value="false">
+                                            <Setter Property="Stroke" Value="{DynamicResource Window.DefaultBorderBrush}"/>
+                                            <Setter Property="Fill" Value="Red"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Open}" Value="true">
+                                            <Setter Property="Stroke" Value="{DynamicResource Window.DefaultBorderBrush}"/>
+                                            <Setter Property="Fill" Value="LawnGreen"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DockPanel.Resources>
+                            <Border VerticalAlignment="Center" CornerRadius="4"
+                                    Background="{DynamicResource Control.DefaultBackground}">
+                                <TextBlock Text="{Binding Name}" 
+                                     Margin="-2, 4, 0, 0" Height="36" Padding="6, 0"
+                                     FontSize="18" DockPanel.Dock="Left"/>
+                                <Border.Effect>
+                                    <DropShadowEffect BlurRadius="5" Direction="-45" ShadowDepth="3" Color="Black"/>
+                                </Border.Effect>
+                            </Border>
+                            <TextBlock Style="{StaticResource OpenState}" FontSize="18"
+                                       VerticalAlignment="Center" Margin="8, 3" DockPanel.Dock="Right"/>
+                            <Ellipse Style="{StaticResource OpenStateE}" DockPanel.Dock="Right" Width="12" Height="12"/>
+
+                            <UserControl/>
+                        </DockPanel>
+                    </Border>
+                    <Border BorderBrush="{DynamicResource Window.DefaultBorderBrush}" BorderThickness="1" 
+                            Grid.Row="1" Margin="0, 8, 0, 0" CornerRadius="3, 3, 0, 0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition/>
+                                <RowDefinition Height="30"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                                     AcceptsReturn="True" MaxHeight="64"
+                                     Height="Auto" Padding="4" BorderBrush="Transparent"/>
+
+                            <TextBlock FontSize="14" Grid.Row="1" Margin="18"
+                                       HorizontalAlignment="Center" VerticalAlignment="Bottom">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RecordHotKeyState}" Value="True">
+                                                <Setter Property="Text" Value="{Binding Lang.text_click_cancel_record_hot_key, ElementName=mwvm}"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding RecordHotKeyState}" Value="False">
+                                                <Setter Property="Text" Value="{Binding Lang.text_click_record_hot_key, ElementName=mwvm}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+
+                            <Button Command="{Binding ElementName=mwvm, Path=ChangeRecordHotKeyState}"
+                                    BorderThickness="3"
+                                    Background="Transparent" 
+                                    Padding="5"
+                                    Grid.Row="1"
+                                    HorizontalContentAlignment="Center" 
+                                    VerticalContentAlignment="Bottom">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type Button}">
+                                                    <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                                                        <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RecordHotKeyState}" Value="True">
+                                                <Setter Property="Effect">
+                                                    <Setter.Value>
+                                                        <DropShadowEffect Color="Green" 
+                                                            Opacity="0" BlurRadius="64" x:Name="RecordHotKeyButtonEffect" ShadowDepth="0"/>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <DataTrigger.EnterActions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <ColorAnimation 
+                                                                Storyboard.TargetProperty="(BorderBrush).Color"
+                                                                Duration="0:0:0.5" 
+                                                                From="Gray" To="GreenYellow"/>
+                                                            <DoubleAnimation Storyboard.TargetProperty="(Effect).Opacity"
+                                                                AutoReverse="True"
+                                                                RepeatBehavior="Forever"
+                                                                Duration="0:0:1" From="0" To="1"/>
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </DataTrigger.EnterActions>
+                                                <DataTrigger.ExitActions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <ColorAnimation 
+                                                                Storyboard.TargetProperty="(BorderBrush).Color"
+                                                                Duration="0:0:0.5" To="Gray"/>
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </DataTrigger.ExitActions>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Height="100" Grid.Row="1">
+
+                                <ListBox Height="80" Margin="6" 
+                                         BorderBrush="Transparent"
+                                         Background="Transparent"
+                                         Foreground="{DynamicResource Control.DefaultForeground}"
+                                         ItemsSource="{Binding Keys}"
+                                         x:Name="Keys">
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                                                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal"/>
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Rectangle Stroke="{DynamicResource Control.DefaultForeground}" 
+                                                           Fill="Transparent"
+                                                           StrokeThickness="3"
+                                                           Width="64" Height="64" RadiusX="8" RadiusY="8"/>
+                                                <Rectangle 
+                                                    Height="6"
+                                                    Width="18"
+                                                    RadiusX="3"
+                                                    RadiusY="3"
+                                                    Margin="10"
+                                                    VerticalAlignment="Bottom"
+                                                    Fill="{x:Static vm:UserThemeColor.ThemeColorBrush}"/>
+                                                <TextBlock Text="{Binding}" 
+                                                   Background="{DynamicResource Window.DefaultBackground}"
+                                                   FontSize="12"
+                                                   VerticalAlignment="Center"
+                                                   HorizontalAlignment="Center"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </StackPanel>
+
+                            <DockPanel Grid.Row="2">
+                                <CheckBox Margin="8, 2" IsChecked="{Binding Open}" 
+                                          Content="{Binding Lang.edit_view_open, ElementName=mwvm}" 
+                                          Foreground="{DynamicResource Control.DefaultForeground}"
+                                          DockPanel.Dock="Left" VerticalAlignment="Bottom"/>
+
+                                <CheckBox Margin="8, 2" IsChecked="{Binding DistinguishLR}" 
+                                          Content="{Binding Lang.edit_view_distinguish_left_and_right, 
+                                                        ElementName=mwvm}" 
+                                          Foreground="{DynamicResource Control.DefaultForeground}" 
+                                          DockPanel.Dock="Left" VerticalAlignment="Bottom"/>
+
+                                <StackPanel 
+                                    DockPanel.Dock="Right" Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Lang.edit_view_task,
+                                                          ElementName=mwvm}" VerticalAlignment="Center"/>
+                                    <ComboBox DockPanel.Dock="Right" Height="24"  Name="EditCommandViewCB"
+                                              MinWidth="100"
+                                              ItemsSource="{Binding HotKeyCommandTypeNames, ElementName=mwvm}"
+                                              SelectionChanged="ComboBox_SelectionChanged"
+                                              SelectedIndex="{Binding CommandIndex}"/>
+                                </StackPanel>
+
+                                <UserControl/>
+                            </DockPanel>
+                        </Grid>
+                    </Border>
+                    <Border x:Name="CommandDataContext" DataContext="{Binding Command}"
+                        Grid.Row="3" BorderBrush="{DynamicResource Window.DefaultBorderBrush}" BorderThickness="1" CornerRadius="0, 0, 3, 3">
+                        <Frame x:Name="EditCommandView" NavigationUIVisibility="Hidden"/>
+                    </Border>
+                </Grid>
+            </GroupBox>
+        </Grid>
+        <Frame Grid.RowSpan="2" Grid.ColumnSpan="3" Source="\Views\Dialog\MessageBoxPage.xaml" 
+               NavigationUIVisibility="Hidden"/>
+    </Grid>
+</Window>

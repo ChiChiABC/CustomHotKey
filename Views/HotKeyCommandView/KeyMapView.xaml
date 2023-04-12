@@ -1,0 +1,104 @@
+﻿<Page x:Class="CustomHotKey.Views.HotKeyCommandView.KeyMapView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:vm="clr-namespace:CustomHotKey.ViewModels"
+      mc:Ignorable="d" 
+      TextOptions.TextFormattingMode="Display"
+      UseLayoutRounding="True"
+      d:DesignHeight="140" d:DesignWidth="574"
+      Title="KeyMapView">
+    <Grid>
+        <ListBox Background="Transparent" BorderBrush="Transparent" ItemsSource="{Binding Keys}" HorizontalAlignment="Center">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Rectangle Stroke="{DynamicResource Control.DefaultForeground}" 
+                            Fill="Transparent"
+                            StrokeThickness="3"
+                            Width="64" Height="64" RadiusX="8" RadiusY="8"/>
+                        <Rectangle 
+                            Height="6"
+                            Width="18"
+                            RadiusX="3"
+                            RadiusY="3"
+                            Margin="10"
+                            VerticalAlignment="Bottom"
+                            Fill="{x:Static vm:UserThemeColor.ThemeColorBrush}"/>
+                        <TextBlock Text="{Binding}" 
+                            Foreground="{DynamicResource Control.DefaultForeground}"
+                            Background="{DynamicResource Window.DefaultBackground}"
+                            FontSize="12"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <TextBlock x:Name="tb" FontSize="12" Margin="18"
+                   Foreground="{DynamicResource Control.DefaultForeground}"
+                   HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="{Binding Lang.text_click_record_or_cancel_hot_key}"/>
+        <Button Command="{Binding ChangeRecordKey}"
+                                    BorderThickness="3"
+                                    Background="Transparent" 
+                                    Padding="5"
+                                    Grid.Row="1"
+                                    HorizontalContentAlignment="Center" 
+                                    VerticalContentAlignment="Bottom">
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                                    <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding RecordKey}" Value="True">
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect Color="Green" 
+                                                            Opacity="0" BlurRadius="64" x:Name="RecordHotKeyButtonEffect" ShadowDepth="0"/>
+                                </Setter.Value>
+                            </Setter>
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation 
+                                                                Storyboard.TargetProperty="(BorderBrush).Color"
+                                                                Duration="0:0:0.5" 
+                                                                From="Gray" To="GreenYellow"/>
+                                        <DoubleAnimation Storyboard.TargetProperty="(Effect).Opacity"
+                                                                AutoReverse="True"
+                                                                RepeatBehavior="Forever"
+                                                                Duration="0:0:1" From="0" To="1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation 
+                                                                Storyboard.TargetProperty="(BorderBrush).Color"
+                                                                Duration="0:0:0.5" To="Gray"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+
+    </Grid>
+</Page>

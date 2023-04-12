@@ -1,0 +1,10 @@
+﻿*.csproj
+*.csproj.user
+packages/
+bin/
+.vs/
+Key/
+obj/
+*.suo
+*.vsidx
+*.chkey

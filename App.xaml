@@ -1,0 +1,17 @@
+﻿<Application x:Class="CustomHotKey.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:CustomHotKey"
+             xmlns:vm ="clr-namespace:CustomHotKey.ViewModels"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="ThemeColor" Color="{x:Static vm:UserThemeColor.ThemeColor}"/>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="\Resources\Color\DarkTheme.xaml"/>
+                <ResourceDictionary Source="\Resources\ControlStyles.xaml"/>
+                <ResourceDictionary Source="\Resources\Icon\Icon.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

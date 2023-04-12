@@ -1,0 +1,70 @@
+﻿<Page x:Class="CustomHotKey.Views.Dialog.DialogPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:CustomHotKey.Views.Dialog"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      TextOptions.TextFormattingMode="Display"
+      UseLayoutRounding="True"
+      Title="DialogPage">
+
+
+    <Grid>
+        <Grid x:Name="background" Background="#80121212" Opacity="0" IsHitTestVisible="False"/>
+
+        <Grid Width="260" Height="Auto" x:Name="dialog"
+              MinHeight="80" VerticalAlignment="Top" Margin="20">
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="18"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.RenderTransform>
+                <TranslateTransform x:Name="dialogTT" Y="-300"/>
+            </Grid.RenderTransform>
+
+            <Rectangle Fill="{DynamicResource Control.DefaultBackground}"
+                       Stroke="{DynamicResource Control.DefaultBorderBrush}"
+                       RadiusX="5" RadiusY="5" Grid.RowSpan="2" Name="dialogBG"/>
+
+            <Rectangle Width="64" Height="64" Margin="10, 0" x:Name="iconRect"
+                       Grid.RowSpan="2" HorizontalAlignment="Left">
+                <Rectangle.Fill>
+                    <DrawingBrush>
+                        <DrawingBrush.Drawing>
+                            <GeometryDrawing x:Name="icon"
+                                             Brush="{DynamicResource Control.DefaultForeground}" 
+                                             Geometry="{StaticResource information}"/>
+                        </DrawingBrush.Drawing>
+                    </DrawingBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <TextBlock Grid.RowSpan="2" FontSize="12" VerticalAlignment="Center"
+                       Margin="80, 0, 0, 0" x:Name="msg"
+                       Foreground="{DynamicResource Control.DefaultForeground}"/>
+
+            <Border 
+                x:Name="titleBar"
+                Padding="4, 0"
+                Height="18" VerticalAlignment="Top" 
+                BorderThickness="0, 0, 0, 1" 
+                BorderBrush="{DynamicResource Control.DefaultBorderBrush}">
+                <TextBlock 
+                    x:Name="title"
+                    Height="18"
+                    FontSize="12"
+                    Foreground="{DynamicResource Control.DefaultForeground}"/>
+            </Border>
+
+            <TextBox x:Name="text" Grid.Row="1" Height="24" VerticalAlignment="Top" Margin="4"/>
+            
+            <StackPanel Orientation="Horizontal" Grid.Row="1" x:Name="okCancel"
+                        HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="4">
+                <Button x:Name="ok" Width="Auto" MinWidth="60" Height="24"/>
+                <Button x:Name="cancel" Width="Auto" MaxHeight="60" Height="24"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>
