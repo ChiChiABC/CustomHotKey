@@ -7,6 +7,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Resources;
 
 namespace CustomHotKey.Models
 {
@@ -67,6 +69,26 @@ namespace CustomHotKey.Models
         static Language()
         {
             Directory.CreateDirectory(languageFolderPath);
+
+            if (!File.Exists(languageFolderPath + "\\zh-cn.json"))
+            {
+                StreamResourceInfo sri = Application.GetResourceStream(new Uri("/Resources/Lang/zh-cn.json", UriKind.Relative));
+
+                Stream resFilestream = sri.Stream;
+
+                if (resFilestream != null)
+                {
+                    BinaryReader br = new BinaryReader(resFilestream);
+                    FileStream fs = new FileStream(languageFolderPath + "\\zh-cn.json", FileMode.Create);
+                    BinaryWriter bw = new BinaryWriter(fs);
+                    byte[] ba = new byte[resFilestream.Length];
+                    resFilestream.Read(ba, 0, ba.Length);
+                    bw.Write(ba);
+                    br.Close();
+                    bw.Close();
+                    resFilestream.Close();
+                }
+            }
 
             string[] languageFiles = Directory.GetFiles(languageFolderPath);
             for (int i = 0; i < languageFiles.Length; i++)

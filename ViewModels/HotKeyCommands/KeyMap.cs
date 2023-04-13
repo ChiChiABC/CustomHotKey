@@ -91,17 +91,24 @@ namespace CustomHotKey.ViewModels.HotKeyCommands
         {
             base.Invoke();
 
-            foreach (var item in Args)
+            try
             {
-                await Task.Delay(10);
-                KeyBoardTool.keybd_event(Convert.ToByte((int)Enum.Parse(typeof(Keys), item)),
-                    0, 0, 0);
+                foreach (var item in Args)
+                {
+                    await Task.Delay(10);
+                    KeyBoardTool.keybd_event(Convert.ToByte((int)Enum.Parse(typeof(Keys), item)),
+                        0, 0, 0);
+                }
+                foreach (var item in Args)
+                {
+                    await Task.Delay(10);
+                    KeyBoardTool.keybd_event(Convert.ToByte((int)Enum.Parse(typeof(Keys), item)),
+                        0, 2, 0);
+                }
             }
-            foreach (var item in Args)
+            catch (Exception)
             {
-                await Task.Delay(10);
-                KeyBoardTool.keybd_event(Convert.ToByte((int)Enum.Parse(typeof(Keys), item)),
-                    0, 2, 0);
+                return;
             }
         }
 

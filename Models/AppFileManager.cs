@@ -28,7 +28,7 @@ namespace CustomHotKey.Models
         /// 新建热键文件时的默认内容
         /// </summary>
         public static string DefaultFileContent =
-            @"{""Description"":""Hello!"",""Open"":false,""DistinguishLR"": true, ""Keys"":[67,72,75],""CommandType"":""OpenFile"",""Command"":{""Args"":[]}}";
+            @"{""Description"":""Hello!"",""Open"":false,""DistinguishLR"": false, ""Keys"":[],""CommandType"":""OpenFile"",""Command"":{""Args"":[]}}";
 
         static AppFileManager()
         {
@@ -165,6 +165,13 @@ namespace CustomHotKey.Models
         public static void GetAllFileAndDirectories(
             string path, ref ObservableCollection<FileItem> collection)
         {
+            // 创建默认文件
+            if (!File.Exists(FileViewPath + "\\" + "Hello.chkey"))
+            {
+                File.Create(FileViewPath + "\\" + "hello.chkey").Close();
+                File.WriteAllText(FileViewPath + "\\" + "hello.chkey", DefaultFileContent);
+            }
+
             if (collection == null) collection = new ObservableCollection<FileItem>();
 
             collection.Clear();

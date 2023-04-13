@@ -192,7 +192,7 @@ namespace CustomHotKey.ViewModels
                 }
                 else
                 {
-                    SelectedHotKey = null;
+                    SelectedHotKey = new HotKeyViewModel();
                 }
             }
         }
@@ -289,8 +289,8 @@ namespace CustomHotKey.ViewModels
                     {
                         if (e.MessageID == id && ((bool)e.Args[0]) == true)
                         {
-                            AppFileManager.DeleteFileItem(selectedFileItem);
-                            selectedFileItem = null;
+                            AppFileManager.DeleteFileItem(SelectedFileItem);
+                            SelectedFileItem = null;
 
                         }
                     };

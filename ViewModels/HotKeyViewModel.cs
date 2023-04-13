@@ -194,6 +194,11 @@ namespace CustomHotKey.ViewModels
                 KeyBoardTool.HotKeyFunctions += NotifyKeysChanged;
             }
 
+            public HotKeyViewModel()
+            {
+                hotKey = new HotKey(AppFileManager.FileViewPath + "\\" + "hello.chkey");
+            }
+
             ~HotKeyViewModel() 
             { 
                 KeyBoardTool.HotKeyFunctions -= NotifyKeysChanged; 
