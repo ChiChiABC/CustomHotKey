@@ -14,7 +14,7 @@ namespace CustomHotKey.Views.HotKeyCommandView
         public RunCommandView()
         {
             InitializeComponent();
-            this.cb.DataContext = App.Current.MainWindow.DataContext;
+            this.cbt.DataContext = App.Current.MainWindow.DataContext;
         }
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)

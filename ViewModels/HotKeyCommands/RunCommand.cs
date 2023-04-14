@@ -44,8 +44,6 @@ namespace CustomHotKey.ViewModels.HotKeyCommands
             {
                 Args.Clear();
 
-                Console.WriteLine("CI C");
-
                 if (Args.Count != 0)
                 {
                     Args[0] = this.RetainWindow.ToString();
@@ -78,7 +76,7 @@ namespace CustomHotKey.ViewModels.HotKeyCommands
         public override void Invoke()
         {
             base.Invoke();
-
+            Console.WriteLine(RetainWindow);
             string tempCommand = "";
 
             tempCommand = (this.RetainWindow ? "/k " : "/c ");

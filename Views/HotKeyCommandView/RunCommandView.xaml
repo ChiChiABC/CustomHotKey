@@ -20,13 +20,13 @@
                 <DockPanel Grid.Row="0">
                     <Button Content="+" Width="24" FontSize="16"
                             ToolTip="添加命令" Click="Button_Click"/>
-                    <CheckBox x:Name="cb" DockPanel.Dock="Right" Margin="30, 0" IsChecked="{Binding RetainWindow}">
-                        <CheckBox.Content>
-                            <TextBlock Text="{Binding Lang.text_retain_command_line_window}" 
-                           FontSize="12" DockPanel.Dock="Right"
+
+                    <TextBlock Text="{Binding Lang.text_retain_command_line_window}" VerticalAlignment="Center" Margin="10, 0"
+                           FontSize="12" DockPanel.Dock="Right" x:Name="cbt"
                            Foreground="{DynamicResource Control.DefaultForeground}"/>
-                        </CheckBox.Content>
-                    </CheckBox>
+
+                    <CheckBox x:Name="cb" DockPanel.Dock="Right" IsChecked="{Binding RetainWindow}"/>
+
                     <UserControl/>
                 </DockPanel>
             </Border>
