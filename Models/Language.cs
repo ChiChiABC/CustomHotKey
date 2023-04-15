@@ -72,7 +72,7 @@ namespace CustomHotKey.Models
 
             if (!File.Exists(languageFolderPath + "\\zh-cn.json"))
             {
-                StreamResourceInfo sri = Application.GetResourceStream(new Uri("/Resources/Lang/zh-cn.json", UriKind.Relative));
+                StreamResourceInfo sri = Application.GetResourceStream(new Uri("/Language/zh-cn.json", UriKind.Relative));
 
                 Stream resFilestream = sri.Stream;
 
@@ -87,6 +87,23 @@ namespace CustomHotKey.Models
                     br.Close();
                     bw.Close();
                     resFilestream.Close();
+                }
+
+                StreamResourceInfo srie = Application.GetResourceStream(new Uri("/Language/en-us.json", UriKind.Relative));
+
+                Stream resFilestreame = srie.Stream;
+
+                if (resFilestreame != null)
+                {
+                    BinaryReader br = new BinaryReader(resFilestreame);
+                    FileStream fs = new FileStream(languageFolderPath + "\\en-us.json", FileMode.Create);
+                    BinaryWriter bw = new BinaryWriter(fs);
+                    byte[] ba = new byte[resFilestreame.Length];
+                    resFilestreame.Read(ba, 0, ba.Length);
+                    bw.Write(ba);
+                    br.Close();
+                    bw.Close();
+                    resFilestreame.Close();
                 }
             }
 
