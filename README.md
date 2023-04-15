@@ -6,22 +6,22 @@
 
 * 通过用户界面对热键进行增删改操作
 * 通过json字符串的形式存储热键，方便迁移
-* 内置深浅主题
+* 内置深色浅色主题
 * 程序主题色跟随系统主题色变化
 * 多语言支持
 * 程序免安装，即下即用
 
 ## 系统要求 
 
-* windows 7
-* windows 8.1
+* windows 7 SP1 (需安装.net4.8)
+* windows 8.1 (需安装.net4.8)
 * windows 10
 * windows 11
 
 ## 安装步骤
 
-1. 前往 [release](https://gitee.com/CC_Hello/custom-hot-key/releases) 页面选择合适的版本进行下载
-2. 打开下载好的`.exe`文件
+1. 前往 [release](https://gitee.com/CC_Hello/custom-hot-key/releases) 页面 
+2. 选择合适的版本进行下载
 
 ## 如何使用
 
