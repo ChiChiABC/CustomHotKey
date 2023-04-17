@@ -7,7 +7,6 @@
         xmlns:m="clr-namespace:CustomHotKey.Models"
         xmlns:vm="clr-namespace:CustomHotKey.ViewModels"
         xmlns:s="clr-namespace:System.Windows;assembly=PresentationFramework"
-        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="{Binding Lang.title_window}" Height="500" Width="800" MinHeight="480" MinWidth="700" 
         TextOptions.TextFormattingMode="Display"
