@@ -25,6 +25,10 @@ namespace CustomHotKey.Views.HotKeyCommandView
         {
             InitializeComponent();
             this.tb.DataContext = App.Current.MainWindow.DataContext;
+            this.cycle.DataContext = App.Current.MainWindow.DataContext;
+            this.interval.DataContext = App.Current.MainWindow.DataContext;
+            this.ms.DataContext = App.Current.MainWindow.DataContext;
+            this.times.DataContext = App.Current.MainWindow.DataContext;
         }
     }
 }

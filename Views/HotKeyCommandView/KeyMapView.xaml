@@ -4,12 +4,17 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:vm="clr-namespace:CustomHotKey.ViewModels"
+      xmlns:myControl="clr-namespace:CustomHotKey.Views.MyControl"
       mc:Ignorable="d" 
       TextOptions.TextFormattingMode="Display"
       UseLayoutRounding="True"
       d:DesignHeight="140" d:DesignWidth="574"
       Title="KeyMapView">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="32"/>
+        </Grid.RowDefinitions>
         <ListBox Background="Transparent" BorderBrush="Transparent" ItemsSource="{Binding Keys}" HorizontalAlignment="Center">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -42,14 +47,13 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <TextBlock x:Name="tb" FontSize="12" Margin="18"
+        <TextBlock x:Name="tb" FontSize="12" Margin="6"
                    Foreground="{DynamicResource Control.DefaultForeground}"
                    HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="{Binding Lang.text_click_record_or_cancel_hot_key}"/>
         <Button Command="{Binding ChangeRecordKey}"
                                     BorderThickness="3"
                                     Background="Transparent" 
                                     Padding="5"
-                                    Grid.Row="1"
                                     HorizontalContentAlignment="Center" 
                                     VerticalContentAlignment="Bottom">
             <Button.Style>
@@ -100,5 +104,26 @@
             </Button.Style>
         </Button>
 
+        <DockPanel Grid.Row="1">
+            <DockPanel.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Margin" Value="10, 0"/>
+                    <Setter Property="Foreground" Value="{DynamicResource Control.DefaultForeground}"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                </Style>
+                <Style TargetType="myControl:NumericBox">
+                    <Setter Property="MinWidth" Value="50" />
+                </Style>
+            </DockPanel.Resources>
+            <TextBlock Text="{Binding Lang.text_cycle}" DockPanel.Dock="Left" x:Name="cycle"/>
+            <myControl:NumericBox DockPanel.Dock="Left" Text="{Binding Cycle, UpdateSourceTrigger=PropertyChanged}" Step="1" Min="1" Max="1000"/>
+            <TextBlock Text="{Binding Lang.text_times}" DockPanel.Dock="Left" x:Name="times"/>
+
+            <TextBlock Text="{Binding Lang.text_ms}" DockPanel.Dock="Right" x:Name="ms"/>
+            <myControl:NumericBox DockPanel.Dock="Right" Text="{Binding Interval, UpdateSourceTrigger=PropertyChanged}" Step="10" Min="10" Max="1000000000"/>
+            <TextBlock Text="{Binding Lang.text_interval}" DockPanel.Dock="Right" x:Name="interval"/>
+
+            <UserControl/>
+        </DockPanel>
     </Grid>
 </Page>

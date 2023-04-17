@@ -17,9 +17,37 @@ namespace CustomHotKey.ViewModels.HotKeyCommands
     [JsonObject(MemberSerialization.OptOut)]
     public class KeyMap : HotKeyCommand
     {
+
         bool overrideOldKeys = true;
 
         private bool recordKey;
+
+        private int cycle = 1;
+
+        public int Cycle
+        {
+            get { return cycle; }
+            set
+            {
+                cycle = value;
+                OnPropertyChanged();
+                UpdateArgs();
+            }
+        }
+
+        private int interval = 10;
+
+        public int Interval
+        {
+            get { return interval; }
+            set
+            {
+                interval = value;
+                OnPropertyChanged();
+                UpdateArgs();
+            }
+        }
+
 
         [JsonIgnore]
         public bool RecordKey
@@ -60,22 +88,20 @@ namespace CustomHotKey.ViewModels.HotKeyCommands
         public KeyMap(List<string> args) : base(args)
         {
             this.Args = args;
-            if (Args != null)
+            if (Args != null && Args.Count > 1)
             {
-                foreach (var arg in Args)
+                cycle = int.Parse(Args[0]);
+                interval = int.Parse(Args[1]);
+                for (int i = 2; i < Args.Count; i++)
                 {
-                    Keys.Add(arg);
+                    Keys.Add(Args[i]);
                 }
             }
             else Args = new List<string>();
 
             Keys.CollectionChanged += (s, e) =>
             {
-                Args.Clear();
-                foreach (var key in Keys)
-                {
-                    Args.Add(key);
-                }
+                UpdateArgs();
             };
 
             ChangeRecordKey = new RelayCommand(() =>
@@ -83,8 +109,19 @@ namespace CustomHotKey.ViewModels.HotKeyCommands
                 RecordKey = !RecordKey;
             });
 
-
             KeyBoardTool.HotKeyFunctions += RecordKeyFunction;
+        }
+
+        private void UpdateArgs()
+        {
+            Args.Clear();
+            Args.Add(Cycle.ToString()); ;
+            Args.Add(Interval.ToString());
+
+            foreach (string key in Keys)
+            {
+                Args.Add(key);
+            }
         }
 
         public async override void Invoke()
@@ -93,17 +130,21 @@ namespace CustomHotKey.ViewModels.HotKeyCommands
 
             try
             {
-                foreach (var item in Args)
+                for (int i = 0; i < cycle; i++)
                 {
-                    await Task.Delay(10);
-                    KeyBoardTool.keybd_event(Convert.ToByte((int)Enum.Parse(typeof(Keys), item)),
-                        0, 0, 0);
-                }
-                foreach (var item in Args)
-                {
-                    await Task.Delay(10);
-                    KeyBoardTool.keybd_event(Convert.ToByte((int)Enum.Parse(typeof(Keys), item)),
-                        0, 2, 0);
+                    for (int j = 2; j < Args.Count; j++)
+                    {
+
+                        await Task.Delay(interval);
+                        KeyBoardTool.keybd_event(Convert.ToByte((int)Enum.Parse(typeof(Keys), Args[j])),
+                            0, 0, 0);
+                    }
+                    for (int k = 2; k < Args.Count; k++)
+                    {
+                        await Task.Delay(interval);
+                        KeyBoardTool.keybd_event(Convert.ToByte((int)Enum.Parse(typeof(Keys), Args[k])),
+                            0, 2, 0);
+                    }
                 }
             }
             catch (Exception)
