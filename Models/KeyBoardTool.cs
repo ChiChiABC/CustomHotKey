@@ -127,11 +127,20 @@ namespace CustomHotKey.Models
                 {
                     keyName = Enum.GetName(typeof(Keys), key).Split('R').Last();
                 }
+
+                Console.WriteLine(keyName);
+
                 if (keyName != null)
                 {
                     Keys k = new Keys();
 
                     Enum.TryParse<Keys>(keyName, out k);
+
+                    if ((int)k == 0)
+                    {
+                        Enum.TryParse<Keys>(key.ToString(), out k);
+                    }
+
                     return (int)k;
                 }
             }
