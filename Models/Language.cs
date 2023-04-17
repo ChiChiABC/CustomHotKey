@@ -146,7 +146,10 @@ namespace CustomHotKey.Models
             public string text_retain_command_line_window { get; set; }
             public string text_hidden_to_tray { get; set; }
             public string text_close_window { get; set; }
-            public string text_name_input_error { get; set; }
+            public string text_cycle { get; set; }
+            public string text_interval { get; set; }
+            public string text_times { get; set; }
+            public string text_ms { get; set; }
             public string menu_file { get; set; }
             public string menu_folder { get; set; }
             public string menu_select_directory { get; set; }
