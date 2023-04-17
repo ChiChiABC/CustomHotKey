@@ -121,6 +121,7 @@ namespace CustomHotKey.Models
                 if (
                 keysIsInNowPressKey
                 && (int)wp != KeyBoardTool.WM_KEYUP
+                && !this.recordHotKeyState
                 && this.jsonData.Open == true)
                 {
                     jsonData.Command.Invoke();
