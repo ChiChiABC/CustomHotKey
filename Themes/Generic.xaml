@@ -3,6 +3,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:CustomHotKey.Views.MyControl">
 
+    <PathGeometry x:Key="arr-up" Figures="M12 8L18 14H6L12 8Z"/>
+    <PathGeometry x:Key="arr-down" Figures="M12 16L6 10H18L12 16Z"/>
+
     <Style TargetType="{x:Type local:NumericBox}">
         <Setter Property="Template">
             <Setter.Value>
@@ -26,14 +29,14 @@
 
                             <Button Grid.Row="0" Grid.Column="1" x:Name="up">
                                 <Button.Content>
-                                    <Rectangle>
+                                    <Rectangle Width="8" Height="8">
                                         <Rectangle.Fill>
                                             <DrawingBrush>
-                                                <!--<DrawingBrush.Drawing>
+                                                <DrawingBrush.Drawing>
                                                     <GeometryDrawing 
-                                                    Geometry="{StaticResource arrow-up}"
+                                                    Geometry="{StaticResource arr-up}"
                                                     Brush="{DynamicResource Control.DefaultForeground}"/>
-                                                </DrawingBrush.Drawing>-->
+                                                </DrawingBrush.Drawing>
                                             </DrawingBrush>
                                         </Rectangle.Fill>
                                     </Rectangle>
@@ -41,14 +44,14 @@
                             </Button>
                             <Button Grid.Row="1" Grid.Column="1" x:Name="down">
                                 <Button.Content>
-                                    <Rectangle>
+                                    <Rectangle Width="8" Height="8">
                                         <Rectangle.Fill>
                                             <DrawingBrush>
-                                                <!--<DrawingBrush.Drawing>
+                                                <DrawingBrush.Drawing>
                                                     <GeometryDrawing 
-                                                    Geometry="{StaticResource arrow-down}"
+                                                    Geometry="{StaticResource arr-down}"
                                                     Brush="{DynamicResource Control.DefaultForeground}"/>
-                                                </DrawingBrush.Drawing>-->
+                                                </DrawingBrush.Drawing>
                                             </DrawingBrush>
                                         </Rectangle.Fill>
                                     </Rectangle>
