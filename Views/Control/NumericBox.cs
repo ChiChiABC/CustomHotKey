@@ -102,7 +102,7 @@ namespace CustomHotKey.Views.MyControl
             {
                 if (int.Parse(Text) >= Min && int.Parse(Text) <= Max)
                 {
-                    Text = (int.Parse(Text) + Step).ToString();
+                    Text = (int.Parse(Text) - Step).ToString();
                 }
             };
         }
