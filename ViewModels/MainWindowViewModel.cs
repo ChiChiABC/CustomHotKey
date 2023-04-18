@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading.Tasks;
@@ -214,6 +216,8 @@ namespace CustomHotKey.ViewModels
 
         public MainWindowViewModel()
         {
+            init();
+            
             //初始化命令
             SelectFileViewPath = new RelayCommand(() =>
             {
@@ -321,6 +325,21 @@ namespace CustomHotKey.ViewModels
 
             // 调用自动保存JSON数据的方法
             AutoSaveJSONData();
+        }
+
+        private void init() {
+            // 判断程序是否运行在桌面
+            if (Directory.GetCurrentDirectory().Split('\\').Last() == "Desktop") {
+
+                System.Windows.MessageBox
+                .Show("程序不能在桌面上运行，请将程序移动到别处",
+                "错误",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+
+                // 强制退出
+                Environment.Exit(0);
+            }
         }
 
         private async void AutoSaveJSONData()
