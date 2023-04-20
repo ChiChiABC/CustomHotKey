@@ -1,0 +1,117 @@
+﻿using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Resources;
+
+namespace CustomHotKey.Models
+{
+    /// <summary>
+    /// 用于应用程序的初始化 
+    /// </summary>
+    public static class Initialization
+    {
+
+        private static bool isFirstStartup = true;
+
+        /// <summary>
+        /// 是否第一次启动
+        /// </summary>
+        public static bool IsFirstStartup
+        {
+            get { return isFirstStartup; }
+        }
+
+        // 初始化
+        public static void Initialize() {
+
+            // 如果 C:\Program Files\CHK 路径存在，就不是第一次启动
+            if (Directory.Exists(@"C\Program Files\CHK\"))
+            {
+                isFirstStartup = false;
+
+                // 终止函数
+                return;
+            }
+
+            // 下面是第一次启动的操作
+            Directory.CreateDirectory("C:\\Program Files\\CHK\\");
+
+            // 调用文件关联函数
+            BindingFile();
+
+        }
+
+        /// <summary>
+        /// 文件关联函数
+        /// </summary>
+        private static void BindingFile() {    
+
+            // 将文件图标存进 C:\Program Files\CHK 路径
+            
+            StreamResourceInfo sri = Application.GetResourceStream(new Uri("/Resources/Icon/fileIcon.ico", UriKind.Relative));
+
+            Stream resFilestream = sri.Stream;
+
+            if (resFilestream != null)
+            {
+                BinaryReader br = new BinaryReader(resFilestream);
+                FileStream fs = new FileStream("C:\\Program Files\\CHK\\fileIcon.ico", 
+                        FileMode.Create);
+                BinaryWriter bw = new BinaryWriter(fs);
+                byte[] ba = new byte[resFilestream.Length];
+                resFilestream.Read(ba, 0, ba.Length);
+                bw.Write(ba);
+                br.Close();
+                bw.Close();
+                resFilestream.Close();
+            }
+
+
+            // 注册表操作
+            RegistryKey registryKey = Registry.LocalMachine
+                .OpenSubKey(@"Software\Classes", true);
+            
+            registryKey.CreateSubKey(AppFileManager.FileSuffix);
+            registryKey.CreateSubKey("CC.CustomHotKey.1");
+
+            registryKey = registryKey.OpenSubKey(AppFileManager.FileSuffix, true);
+
+            registryKey.SetValue("", "CC.CustomHotKey.1");
+
+            registryKey = Registry.LocalMachine.OpenSubKey(@"Software\Classes\CC.CustomHotKey.1", true);
+
+            registryKey.SetValue("", "热键文件");
+
+            registryKey.CreateSubKey("DefaultIcon");
+
+            registryKey = registryKey.OpenSubKey("DefaultIcon", true);
+
+            registryKey.SetValue("", "C:\\Program Files\\CHK\\fileIcon.ico");
+
+            registryKey = Registry.LocalMachine.OpenSubKey(@"Software\Classes\CC.CustomHotKey.1", true);
+
+            registryKey.CreateSubKey("Shell");
+
+            registryKey = registryKey.OpenSubKey("Shell", true);
+
+            registryKey.CreateSubKey("Open");
+
+            registryKey = registryKey.OpenSubKey("Open", true);
+
+            registryKey.CreateSubKey("Command");
+
+            registryKey = registryKey.OpenSubKey("Command", true);
+
+            registryKey.SetValue("", Language.Lang.GetType().Assembly.Location);
+
+            registryKey.Close();
+
+        }
+    }
+}
