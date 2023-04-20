@@ -84,7 +84,7 @@
                                 <TextBlock Text="{Binding Lang.title_window}" 
                                            Margin="40, 0" FontSize="16"
                                            VerticalAlignment="Center"/>
-                                
+
                                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                                     <StackPanel.Effect>
                                         <DropShadowEffect Color="Black" ShadowDepth="2" BlurRadius="24" Direction="0"/>
@@ -187,8 +187,11 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Menu Grid.ColumnSpan="3" VerticalAlignment="Center">
-            <MenuItem Header="{Binding Lang.menu_file}">
+        <Menu Grid.ColumnSpan="3" VerticalAlignment="Center" Height="24">
+            <MenuItem Height="24">
+                <MenuItem.Header>
+                    <TextBlock Text="{Binding Lang.menu_file}" VerticalAlignment="Center"/>
+                </MenuItem.Header>
                 <MenuItem Header="{Binding Lang.menu_select_directory}" Command="{Binding SelectFileViewPath}"/>
                 <MenuItem Header="{Binding Lang.menu_add}">
                     <MenuItem Header="{Binding Lang.menu_file}" Command="{Binding AddFile}"/>
@@ -199,13 +202,64 @@
             </MenuItem>
         </Menu>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="2" Margin="8, 0">
-            <TextBlock Text="{Binding Lang.text_language}" Margin="8, 0" VerticalAlignment="Center"/>
-            <ComboBox SelectedValue="{Binding SelectedLanguageName}" ItemsSource="{Binding LanguageNames}"/>
+        <Menu x:Name="settings" HorizontalAlignment="Right" Grid.Column="2" Height="24">
+            <MenuItem>
+                <MenuItem.Header>
+                    <TextBlock Text="{Binding Lang.text_setting}" VerticalAlignment="Center" FontSize="12"/>
+                </MenuItem.Header>
+                <MenuItem.Icon>
+                    <Rectangle Width="14" Height="14">
+                        <Rectangle.Fill>
+                            <DrawingBrush>
+                                <DrawingBrush.Drawing>
+                                    <GeometryDrawing 
+                                        Brush="{DynamicResource Control.DefaultForeground}" 
+                                        Geometry="{StaticResource setting}"/>
+                                </DrawingBrush.Drawing>
+                            </DrawingBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </MenuItem.Icon>
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="14" Height="14">
+                        <Rectangle.Fill>
+                            <DrawingBrush>
+                                <DrawingBrush.Drawing>
+                                    <GeometryDrawing 
+                                        Brush="{DynamicResource Control.DefaultForeground}" 
+                                        Geometry="{StaticResource language}"/>
+                                </DrawingBrush.Drawing>
+                            </DrawingBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
 
-            <TextBlock Text="{Binding Lang.text_theme}" Margin="8, 0" VerticalAlignment="Center"/>
-            <ComboBox SelectedValue="{Binding Theme}" ItemsSource="{Binding ThemeNames}"/>
-        </StackPanel>
+                    <TextBlock Text="{Binding Lang.text_language}"
+                            Margin="8, 0" VerticalAlignment="Center"/>
+
+                    <ComboBox SelectedValue="{Binding SelectedLanguageName}" 
+                            ItemsSource="{Binding LanguageNames}"/>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="14" Height="14">
+                        <Rectangle.Fill>
+                            <DrawingBrush>
+                                <DrawingBrush.Drawing>
+                                    <GeometryDrawing 
+                                        Brush="{DynamicResource Control.DefaultForeground}" 
+                                        Geometry="{StaticResource theme}"/>
+                                </DrawingBrush.Drawing>
+                            </DrawingBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
+                    <TextBlock Text="{Binding Lang.text_theme}"
+                            Margin="8, 0" VerticalAlignment="Center"/>
+
+                    <ComboBox SelectedValue="{Binding Theme}" 
+                            ItemsSource="{Binding ThemeNames}"/>
+                </StackPanel>
+            </MenuItem>
+        </Menu>
 
         <GridSplitter ResizeDirection="Columns" Grid.Column="1" Grid.Row="1" Width="6" 
                       HorizontalAlignment="Stretch"
