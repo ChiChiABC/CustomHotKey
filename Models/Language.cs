@@ -29,7 +29,7 @@ namespace CustomHotKey.Models
         private static string languageFolderPath =
             Directory.GetCurrentDirectory() + "\\Language\\";
 
-        
+
         private static List<string> languageNames = new List<string>();
 
         /// <summary>
@@ -50,7 +50,8 @@ namespace CustomHotKey.Models
         public static string SelectedLanguageName
         {
             get { return Settings.Default.language; }
-            set { 
+            set
+            {
                 Settings.Default.language = value;
                 Settings.Default.Save();
                 foreach (var item in Directory.GetFiles(languageFolderPath))
@@ -70,41 +71,39 @@ namespace CustomHotKey.Models
         {
             Directory.CreateDirectory(languageFolderPath);
 
-            if (!File.Exists(languageFolderPath + "\\zh-cn.json"))
+            StreamResourceInfo sri = Application.GetResourceStream(new Uri("/Language/zh-cn.json", UriKind.Relative));
+
+            Stream resFilestream = sri.Stream;
+
+            if (resFilestream != null)
             {
-                StreamResourceInfo sri = Application.GetResourceStream(new Uri("/Language/zh-cn.json", UriKind.Relative));
+                BinaryReader br = new BinaryReader(resFilestream);
+                FileStream fs = new FileStream(languageFolderPath + "\\zh-cn.json", FileMode.Create);
+                BinaryWriter bw = new BinaryWriter(fs);
+                byte[] ba = new byte[resFilestream.Length];
+                resFilestream.Read(ba, 0, ba.Length);
+                bw.Write(ba);
+                br.Close();
+                bw.Close();
+                resFilestream.Close();
+            }
 
-                Stream resFilestream = sri.Stream;
+            StreamResourceInfo srie = Application.GetResourceStream(new Uri("/Language/en-us.json", UriKind.Relative));
 
-                if (resFilestream != null)
-                {
-                    BinaryReader br = new BinaryReader(resFilestream);
-                    FileStream fs = new FileStream(languageFolderPath + "\\zh-cn.json", FileMode.Create);
-                    BinaryWriter bw = new BinaryWriter(fs);
-                    byte[] ba = new byte[resFilestream.Length];
-                    resFilestream.Read(ba, 0, ba.Length);
-                    bw.Write(ba);
-                    br.Close();
-                    bw.Close();
-                    resFilestream.Close();
-                }
+            Stream resFilestreame = srie.Stream;
 
-                StreamResourceInfo srie = Application.GetResourceStream(new Uri("/Language/en-us.json", UriKind.Relative));
+            if (resFilestreame != null)
+            {
+                BinaryReader br = new BinaryReader(resFilestreame);
+                FileStream fs = new FileStream(languageFolderPath + "\\en-us.json", FileMode.Create);
+                BinaryWriter bw = new BinaryWriter(fs);
+                byte[] ba = new byte[resFilestreame.Length];
+                resFilestreame.Read(ba, 0, ba.Length);
+                bw.Write(ba);
+                br.Close();
+                bw.Close();
+                resFilestreame.Close();
 
-                Stream resFilestreame = srie.Stream;
-
-                if (resFilestreame != null)
-                {
-                    BinaryReader br = new BinaryReader(resFilestreame);
-                    FileStream fs = new FileStream(languageFolderPath + "\\en-us.json", FileMode.Create);
-                    BinaryWriter bw = new BinaryWriter(fs);
-                    byte[] ba = new byte[resFilestreame.Length];
-                    resFilestreame.Read(ba, 0, ba.Length);
-                    bw.Write(ba);
-                    br.Close();
-                    bw.Close();
-                    resFilestreame.Close();
-                }
             }
 
             string[] languageFiles = Directory.GetFiles(languageFolderPath);
@@ -150,6 +149,7 @@ namespace CustomHotKey.Models
             public string text_interval { get; set; }
             public string text_times { get; set; }
             public string text_ms { get; set; }
+            public string text_setting { get; set; }
             public string menu_file { get; set; }
             public string menu_folder { get; set; }
             public string menu_select_directory { get; set; }
