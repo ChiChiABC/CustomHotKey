@@ -325,6 +325,9 @@ namespace CustomHotKey.ViewModels
 
             // 调用自动保存JSON数据的方法
             AutoSaveJSONData();
+
+            // 初始化
+            Initialization.Initialize();
         }
 
         private void init() {
