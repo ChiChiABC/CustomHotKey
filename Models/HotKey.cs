@@ -17,7 +17,7 @@ namespace CustomHotKey.Models
         /// <summary>
         /// 所有<see cref="HotKey"/>实例的集合
         /// </summary>
-        public static List<HotKey> AllHotKey = new List<HotKey>(); 
+        public static List<HotKey> AllHotKey = new List<HotKey>();
 
         /// <summary>
         /// 用于检测热键状态，执行热键命令
@@ -38,7 +38,7 @@ namespace CustomHotKey.Models
         /// 指定记录热键的开启状态
         /// </summary>
         public bool recordHotKeyState = false;
-        
+
         private string path;
 
         /// <summary>
@@ -101,7 +101,8 @@ namespace CustomHotKey.Models
                                 keysIsInNowPressKey = true;
                                 break;
                             }
-                        } else
+                        }
+                        else
                         {
                             if (x == y)
                             {
@@ -130,6 +131,7 @@ namespace CustomHotKey.Models
             });
             RecordHotKeyFunction = new Action<int, IntPtr, KeyBoardTool.KeyboardHookStruct>((i, wp, ip) =>
             {
+                
                 if ((int)wp != KeyBoardTool.WM_KEYUP && this.recordHotKeyState)
                 {
                     if (overrideOldKey)
@@ -141,7 +143,8 @@ namespace CustomHotKey.Models
                         this.jsonData.Keys.Add(ip.vkCode);
                     }
                     overrideOldKey = false;
-                } else
+                }
+                else
                 {
                     overrideOldKey = true;
                 }
@@ -160,6 +163,9 @@ namespace CustomHotKey.Models
         /// <param name="clearOldArgs">指示是否覆盖旧的参数</param>
         public static void UpdateJSONCommand(HotKeyJSON hk, bool clearOldArgs = true)
         {
+
+            if (hk == null) return;    
+
             Type t = null;
 
             // 遍历HotKeyCommand的命令列表，实例化一个与hk.CommandType相同Name的Type
@@ -177,6 +183,7 @@ namespace CustomHotKey.Models
                 hk.Command = (HotKeyCommand)Activator.CreateInstance(t, hk.Command.Args);
             }
             else hk.Command = (HotKeyCommand)Activator.CreateInstance(t, new List<string>());
+
 
         }
 
@@ -198,7 +205,7 @@ namespace CustomHotKey.Models
         /// </summary>
         public void SaveJSONData()
         {
-            
+
             if (System.IO.File.Exists(this.Path))
             {
                 System.IO.File.WriteAllText(this.path, JsonConvert.SerializeObject(this.jsonData, Formatting.Indented));

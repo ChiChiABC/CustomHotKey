@@ -27,7 +27,7 @@ namespace CustomHotKey.Models
         /// 读取JSON语言文件的文件夹路径
         /// </summary>
         private static string languageFolderPath =
-            Directory.GetCurrentDirectory() + "\\Language\\";
+            AppDomain.CurrentDomain.BaseDirectory + "\\Language\\";
 
 
         private static List<string> languageNames = new List<string>();

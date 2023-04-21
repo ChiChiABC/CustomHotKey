@@ -32,12 +32,12 @@ namespace CustomHotKey.Models
 
         static AppFileManager()
         {
-            Directory.CreateDirectory(Directory.GetCurrentDirectory() + @"\Key\");
+            Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + @"\Key\");
 
 
             if (Settings.Default.FileViewPath == "NULL")
             {
-                FileViewPath = Directory.GetCurrentDirectory() + @"\Key\";
+                FileViewPath = AppDomain.CurrentDomain.BaseDirectory + @"\Key\";
             }
             else
             {
@@ -186,7 +186,7 @@ namespace CustomHotKey.Models
             {
                 collection.Add(new FileItem(item, FileItem.FileType.File));
             }
-            Directory.CreateDirectory(Directory.GetCurrentDirectory() + @"\Key\");
+            Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + @"\Key\");
 
         }
 
@@ -196,15 +196,6 @@ namespace CustomHotKey.Models
         /// </summary>
         public class FileItem
         {
-            private Brush iconBrush;
-
-            /// <summary>
-            /// 文件图标，当<see cref="Type"/>为<see cref="FileItem.FileType.Folder"/>时，该属性为空
-            /// </summary>
-            public Brush IconBrush
-            {
-                get { return iconBrush; }
-            }
 
             private FileType type; 
 
@@ -277,16 +268,6 @@ namespace CustomHotKey.Models
                 }
                 else
                 {
-                    // 获取文件的图标
-                    var icon = System.Drawing.Icon.ExtractAssociatedIcon(path);
-
-                    this.iconBrush = new ImageBrush(Imaging.CreateBitmapSourceFromHIcon
-                        (icon.Handle,
-                        new Int32Rect(0, 0, icon.Height, icon.Width),
-                        BitmapSizeOptions.FromEmptyOptions()))
-                    { 
-                        Stretch = Stretch.Fill,
-                    };
 
                     // 创建一个Path属性与自身Path相等的HotKey对象赋值给HotKey
                     this.HotKey = new HotKey(path);
