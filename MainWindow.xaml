@@ -187,7 +187,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Menu Grid.ColumnSpan="3" VerticalAlignment="Center" Height="24">
+        <Menu Grid.ColumnSpan="3" VerticalAlignment="Center" Height="24" 
+            Background="{DynamicResource Control.DefaultBackground}">
             <MenuItem Height="24">
                 <MenuItem.Header>
                     <TextBlock Text="{Binding Lang.menu_file}" VerticalAlignment="Center"/>
@@ -202,7 +203,8 @@
             </MenuItem>
         </Menu>
 
-        <Menu x:Name="settings" HorizontalAlignment="Right" Grid.Column="2" Height="24">
+        <Menu x:Name="settings" HorizontalAlignment="Right" Grid.Column="2" Height="24" 
+            Background="{DynamicResource Control.DefaultBackground}">
             <MenuItem>
                 <MenuItem.Header>
                     <TextBlock Text="{Binding Lang.text_setting}" VerticalAlignment="Center" FontSize="12"/>
@@ -221,17 +223,21 @@
                     </Rectangle>
                 </MenuItem.Icon>
                 <StackPanel Orientation="Horizontal">
-                    <Rectangle Width="14" Height="14">
-                        <Rectangle.Fill>
-                            <DrawingBrush>
-                                <DrawingBrush.Drawing>
-                                    <GeometryDrawing 
+                    <Button IsEnabled="False">
+                        <Button.Content>
+                            <Rectangle Width="14" Height="14">
+                                <Rectangle.Fill>
+                                    <DrawingBrush>
+                                        <DrawingBrush.Drawing>
+                                            <GeometryDrawing 
                                         Brush="{DynamicResource Control.DefaultForeground}" 
                                         Geometry="{StaticResource language}"/>
-                                </DrawingBrush.Drawing>
-                            </DrawingBrush>
-                        </Rectangle.Fill>
-                    </Rectangle>
+                                        </DrawingBrush.Drawing>
+                                    </DrawingBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                        </Button.Content>
+                    </Button>
 
                     <TextBlock Text="{Binding Lang.text_language}"
                             Margin="8, 0" VerticalAlignment="Center"/>
@@ -241,22 +247,46 @@
                 </StackPanel>
                 
                 <StackPanel Orientation="Horizontal">
-                    <Rectangle Width="14" Height="14">
-                        <Rectangle.Fill>
-                            <DrawingBrush>
-                                <DrawingBrush.Drawing>
-                                    <GeometryDrawing 
+                    <Button IsEnabled="False">
+                        <Button.Content>
+                            <Rectangle Width="14" Height="14">
+                                <Rectangle.Fill>
+                                    <DrawingBrush>
+                                        <DrawingBrush.Drawing>
+                                            <GeometryDrawing 
                                         Brush="{DynamicResource Control.DefaultForeground}" 
                                         Geometry="{StaticResource theme}"/>
-                                </DrawingBrush.Drawing>
-                            </DrawingBrush>
-                        </Rectangle.Fill>
-                    </Rectangle>
+                                        </DrawingBrush.Drawing>
+                                    </DrawingBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                        </Button.Content>
+                    </Button>
+                    
                     <TextBlock Text="{Binding Lang.text_theme}"
                             Margin="8, 0" VerticalAlignment="Center"/>
 
                     <ComboBox SelectedValue="{Binding Theme}" 
                             ItemsSource="{Binding ThemeNames}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <Button IsEnabled="False">
+                        <Button.Content>
+                            <Rectangle Width="14" Height="14">
+                                <Rectangle.Fill>
+                                    <DrawingBrush>
+                                        <DrawingBrush.Drawing>
+                                            <GeometryDrawing 
+                                        Brush="{DynamicResource Control.DefaultForeground}" 
+                                        Geometry="{StaticResource unInstaller}"/>
+                                        </DrawingBrush.Drawing>
+                                    </DrawingBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                        </Button.Content>
+                    </Button>
+                    <Button Content="卸载" Width="164" Margin="6, 0" Command="{Binding UnInstaller}"/>
                 </StackPanel>
             </MenuItem>
         </Menu>
@@ -321,7 +351,11 @@
                                                         </Setter>
                                                     </DataTrigger>
                                                     <DataTrigger Binding="{Binding Type}" Value="1">
-                                                        <Setter Property="Fill" Value="{Binding IconBrush}"/>
+                                                        <Setter Property="Fill">
+                                                            <Setter.Value>
+                                                                <ImageBrush ImageSource="\Resources\Icon\fileIcon.ico"/>
+                                                            </Setter.Value>
+                                                        </Setter>
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
