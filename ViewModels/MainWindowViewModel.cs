@@ -154,6 +154,11 @@ namespace CustomHotKey.ViewModels
         public RelayCommand ChangeRecordHotKeyState { get; set; }
 
         /// <summary>
+        /// 卸载程序
+        /// </summary>
+        public RelayCommand UnInstaller { get; set; }
+
+        /// <summary>
         /// 包装<see cref="AppFileManager.FileViewPath"/>
         /// </summary>
         public string FileViewPath
@@ -216,8 +221,12 @@ namespace CustomHotKey.ViewModels
 
         public MainWindowViewModel()
         {
+
             init();
-            
+
+            // 初始化
+            Initialization.Initialize();
+
             //初始化命令
             SelectFileViewPath = new RelayCommand(() =>
             {
@@ -319,6 +328,10 @@ namespace CustomHotKey.ViewModels
                 }
                 OnPropertyChanged("SelectedHotKey");
             });
+            UnInstaller = new RelayCommand(() =>
+            {
+                Models.UnInstaller.StartUnInstaller();
+            });
 
             // 初始化主题
             Theme = Settings.Default.Theme;
@@ -326,13 +339,15 @@ namespace CustomHotKey.ViewModels
             // 调用自动保存JSON数据的方法
             AutoSaveJSONData();
 
-            // 初始化
-            Initialization.Initialize();
+        }
+
+        ~MainWindowViewModel() {
+            KeyBoardTool.Stop();
         }
 
         private void init() {
             // 判断程序是否运行在桌面
-            if (Directory.GetCurrentDirectory().Split('\\').Last() == "Desktop") {
+            if (AppDomain.CurrentDomain.BaseDirectory.Split('\\').Last() == "Desktop") {
 
                 System.Windows.MessageBox
                 .Show("程序不能在桌面上运行，请将程序移动到别处",

@@ -203,7 +203,6 @@ namespace CustomHotKey.ViewModels
             { 
                 KeyBoardTool.HotKeyFunctions -= NotifyKeysChanged; 
                 hotKey.SaveJSONData(); 
-                KeyBoardTool.Stop(); 
             }
         }
     }
