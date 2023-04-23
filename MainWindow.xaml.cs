@@ -3,6 +3,7 @@ using CustomHotKey.Properties;
 using CustomHotKey.ViewModels;
 using CustomHotKey.ViewModels.HotKeyCommands;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows;
@@ -61,7 +62,7 @@ namespace CustomHotKey
                     }
                     else if (!(bool)ea.Args[0])
                     {
-                        Environment.Exit(0);
+                        Process.GetCurrentProcess().Kill();
                     }
                     DialogMessage.Return -= CloseingWindowFunc;
                 }
