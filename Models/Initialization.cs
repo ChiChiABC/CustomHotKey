@@ -38,10 +38,7 @@ namespace CustomHotKey.Models
                     .OpenSubKey("\\Software\\Classes\\CC.CustomHotKey.1\\Shell\\Open\\Command", true);
                 registryKey.SetValue("", typeof(Initialization).Assembly.Location);
             }
-            catch (Exception)
-            {
-                return;
-            }
+            catch (Exception) { }
 
             // 如果 C:\Program Files 或 Program Files (x86)\CustomHotKey\ 路径存在，就不是第一次启动
             if (Directory.Exists(GetProgramFilePath() + "\\CustomHotKey\\"))
