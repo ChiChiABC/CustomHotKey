@@ -27,7 +27,7 @@
                             Foreground="{DynamicResource Control.DefaultForeground}"
                             Text="{TemplateBinding Text}" VerticalContentAlignment="Center"/>
 
-                            <Button Grid.Row="0" Grid.Column="1" x:Name="up">
+                            <Button Grid.Row="0" Grid.Column="1" x:Name="up" IsEnabled="True">
                                 <Button.Content>
                                     <Rectangle Width="8" Height="8">
                                         <Rectangle.Fill>
@@ -42,7 +42,7 @@
                                     </Rectangle>
                                 </Button.Content>
                             </Button>
-                            <Button Grid.Row="1" Grid.Column="1" x:Name="down">
+                            <Button Grid.Row="1" Grid.Column="1" x:Name="down" IsEnabled="True">
                                 <Button.Content>
                                     <Rectangle Width="8" Height="8">
                                         <Rectangle.Fill>

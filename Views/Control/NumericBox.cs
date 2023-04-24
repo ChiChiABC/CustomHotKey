@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -91,18 +92,25 @@ namespace CustomHotKey.Views.MyControl
             
             var up = GetTemplateChild("up") as Button;
             var down = GetTemplateChild("down") as Button;
+
+            this.IsReadOnly = true;
+
             up.Click += (s, e) =>
             {
-                if (int.Parse(Text) >= Min && int.Parse(Text) <= Max)
+                int value = int.Parse(Text) + Step;
+
+                if (value >= Min && value <= Max)
                 {
-                    Text = (int.Parse(Text) + Step).ToString();
+                    Text = (value).ToString();
                 }
             };
             down.Click += (s, e) =>
             {
-                if (int.Parse(Text) >= Min && int.Parse(Text) <= Max)
+                int value = int.Parse(Text) - Step;
+
+                if (value >= Min && value <= Max)
                 {
-                    Text = (int.Parse(Text) - Step).ToString();
+                    Text = (value).ToString();
                 }
             };
         }
