@@ -21,7 +21,7 @@ namespace CustomHotKey.Models
         /// 描述当前按键的结构体
         /// </summary>
         [StructLayout(LayoutKind.Sequential)]
-        public class KeyboardHookStruct
+        public class KeyStruct
 
         {
             public int vkCode;
@@ -36,28 +36,35 @@ namespace CustomHotKey.Models
 
         }
 
-        /// <summary>
-        /// 按键向上(松开按键)
-        /// </summary>
         public const int WM_KEYUP = 0x0101;
+        public const int WM_KEYDOWN = 0x0100;
+        public const int LBUTTON = 513;
+        public const int MBUTTON = 519;
+        public const int RBUTTON = 516;
+        public const int XBUTTON1 = 523;
 
         /// <summary>
         /// 全局键盘钩子
         /// </summary>
         public const int WH_KEYBOARD_LL = 13;
+        /// <summary>
+        /// 全局键盘钩子
+        /// </summary>
+        public const int WH_MOUSE_LL = 14;
 
-        private static int hKeyBoardHook;
+        private static int KeyBoardHook;
+        private static int MouseHook;
 
-        public delegate int HookProc(int nCode, IntPtr wParam, IntPtr iParam);
+        public delegate int HookProc(int nCode, IntPtr wParam, IntPtr iparam);
 
         /// <summary>
         /// 键盘钩子的处理函数，包含了<see cref="NowPressKey"/>的处理，<see cref="HotKeyFunctions"/>的调用
         /// </summary>
-        private static HookProc hookProc = (int nCode, IntPtr wParam, IntPtr iParam) =>
+        private static HookProc keyBoardHookProc = (int nCode, IntPtr wParam, IntPtr iparam) =>
         {
-            KeyBoardTool.KeyboardHookStruct keyData =
-                        (KeyBoardTool.KeyboardHookStruct)
-                            Marshal.PtrToStructure(iParam, typeof(KeyBoardTool.KeyboardHookStruct));
+            KeyBoardTool.KeyStruct keyData =
+                        (KeyBoardTool.KeyStruct)
+                            Marshal.PtrToStructure(iparam, typeof(KeyBoardTool.KeyStruct));
             
             if ((int)wParam != WM_KEYUP)
             {
@@ -71,13 +78,66 @@ namespace CustomHotKey.Models
 
             HotKeyFunctions?.Invoke(nCode, wParam, keyData);
 
-            return KeyBoardTool.CallNextHookEx(nCode, wParam, iParam);
+            return CallNextHookEx(KeyBoardHook, nCode, wParam, iparam);
+        };
+
+        private static HookProc MouseHookProc = (int nCode, IntPtr wParam, IntPtr iparam) =>
+        {
+
+            KeyStruct keyData = new KeyStruct();
+
+            switch ((int)wParam)
+            {
+                case LBUTTON:
+                    keyData.vkCode = (int)Keys.LButton;
+                    break;
+                case MBUTTON:
+                    keyData.vkCode = (int)Keys.MButton;
+                    break;
+                case RBUTTON:
+                    keyData.vkCode = (int)Keys.RButton;
+                    break;
+                case XBUTTON1:
+                    keyData.vkCode = (int)Keys.XButton1;
+                    break;
+                default:
+                    break;
+            }
+
+            switch ((int)wParam)
+            {
+                case 512:
+                    return CallNextHookEx(MouseHook, nCode, wParam, iparam);
+                case LBUTTON:
+                case MBUTTON:
+                case RBUTTON:
+                case XBUTTON1:
+                    wParam = (IntPtr)WM_KEYDOWN;
+                    break;
+                default:
+                    wParam = (IntPtr)WM_KEYUP;
+                    break;
+            }
+
+            if ((int)wParam != WM_KEYUP && !NowPressKey.Contains(keyData.vkCode))
+            {
+                NowPressKey.Add(keyData.vkCode);
+            }
+
+            if ((int)wParam == WM_KEYUP)
+            {
+                NowPressKey.Clear();
+            }
+
+            HotKeyFunctions?.Invoke(nCode, wParam, keyData);
+
+            return CallNextHookEx(MouseHook, nCode, wParam, iparam);
         };
 
         /// <summary>
         /// 当按键变化时会调用此委托
         /// </summary>
-        public static Action<int, IntPtr, KeyboardHookStruct> HotKeyFunctions;
+        public static Action<int, IntPtr, KeyStruct> HotKeyFunctions;
 
         // 安装钩子
         [DllImport("user32.dll")]
@@ -101,12 +161,6 @@ namespace CustomHotKey.Models
              int dwFlags,  // 0 为按下，2为释放
              int dwExtraInfo  
         );
-
-        // 包装 CallNextHookEx
-        public static int CallNextHookEx(int code, IntPtr wparam, IntPtr iparam)
-        {
-            return CallNextHookEx(hKeyBoardHook, code, wparam, iparam);
-        }
 
         /// <summary>
         /// 将带有LR前缀的键码转换为不带有LR前缀的键码
@@ -149,12 +203,22 @@ namespace CustomHotKey.Models
 
         static KeyBoardTool()
         {
-            hKeyBoardHook =
+            // 安装键盘钩子
+            KeyBoardHook =
             SetWindowsHookEx(WH_KEYBOARD_LL,
-                hookProc,
+                keyBoardHookProc,
                 Marshal.GetHINSTANCE(System.Reflection.
                     Assembly.GetExecutingAssembly().GetModules()[0]),
                 0);
+
+            // 安装鼠标钩子
+            MouseHook = 
+            SetWindowsHookEx(WH_MOUSE_LL,
+                MouseHookProc,
+                Marshal.GetHINSTANCE(System.Reflection.
+                    Assembly.GetExecutingAssembly().GetModules()[0]),
+                0);
+
         }
 
         /// <summary>
@@ -162,7 +226,8 @@ namespace CustomHotKey.Models
         /// </summary>
         public static void Stop()
         {
-            UnhookWindowsHookEx(hKeyBoardHook);
+            UnhookWindowsHookEx(KeyBoardHook);
+            UnhookWindowsHookEx(MouseHook);
         }
     }
 }

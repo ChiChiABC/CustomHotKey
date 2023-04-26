@@ -14,6 +14,8 @@ namespace CustomHotKey.Models
     /// </summary>
     public class HotKey
     {
+
+        public static event EventHandler CancelRecord;
         /// <summary>
         /// 所有<see cref="HotKey"/>实例的集合
         /// </summary>
@@ -22,12 +24,12 @@ namespace CustomHotKey.Models
         /// <summary>
         /// 用于检测热键状态，执行热键命令
         /// </summary>
-        private Action<int, IntPtr, KeyBoardTool.KeyboardHookStruct> HotKeyFunction;
+        private Action<int, IntPtr, KeyBoardTool.KeyStruct> HotKeyFunction;
 
         /// <summary>
         /// 用于记录热键
         /// </summary>
-        private Action<int, IntPtr, KeyBoardTool.KeyboardHookStruct> RecordHotKeyFunction;
+        private Action<int, IntPtr, KeyBoardTool.KeyStruct> RecordHotKeyFunction;
 
         /// <summary>
         /// 指定记录热键时是否覆盖之前的热键
@@ -82,7 +84,7 @@ namespace CustomHotKey.Models
             // 加载JSON数据
             LoadJSONData();
 
-            HotKeyFunction = new Action<int, IntPtr, KeyBoardTool.KeyboardHookStruct>((i, wp, ip) =>
+            HotKeyFunction = new Action<int, IntPtr, KeyBoardTool.KeyStruct>((i, wp, ip) =>
             {
                 bool keysIsInNowPressKey = true;
 
@@ -129,9 +131,14 @@ namespace CustomHotKey.Models
                 }
 
             });
-            RecordHotKeyFunction = new Action<int, IntPtr, KeyBoardTool.KeyboardHookStruct>((i, wp, ip) =>
+            RecordHotKeyFunction = new Action<int, IntPtr, KeyBoardTool.KeyStruct>((i, wp, ip) =>
             {
-                
+                if (ip.vkCode == (int)Keys.Space && KeyBoardTool.NowPressKey.Count == 1)
+                {
+                    recordHotKeyState = false;
+                    CancelRecord?.Invoke(null, new EventArgs());
+                    return;
+                }
                 if ((int)wp != KeyBoardTool.WM_KEYUP && this.recordHotKeyState)
                 {
                     if (overrideOldKey)
