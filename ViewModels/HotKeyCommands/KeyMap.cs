@@ -62,8 +62,13 @@ namespace CustomHotKey.ViewModels.HotKeyCommands
         [JsonIgnore]
         public ObservableCollection<string> Keys { get; set; } = new ObservableCollection<string>();
 
-        void RecordKeyFunction(int nCode, IntPtr wp, KeyBoardTool.KeyboardHookStruct ip)
+        void RecordKeyFunction(int nCode, IntPtr wp, KeyBoardTool.KeyStruct ip)
         {
+
+            if (Enum.GetName(typeof(Keys), ip.vkCode).Contains("Button"))
+            {
+                return;
+            }
             if ((int)wp != KeyBoardTool.WM_KEYUP && RecordKey)
             {
                 if (overrideOldKeys == true)

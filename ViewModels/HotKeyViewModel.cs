@@ -181,22 +181,28 @@ namespace CustomHotKey.ViewModels
             /// <summary>
             /// 当有按键操作时，通知View，<see cref="HotKey.HotKeyJSON.Keys"/>已更改
             /// </summary>
-            Action<int, IntPtr, KeyBoardTool.KeyboardHookStruct> NotifyKeysChanged;
+            Action<int, IntPtr, KeyBoardTool.KeyStruct> NotifyKeysChanged;
 
-            public HotKeyViewModel(HotKey hk)
+            public HotKeyViewModel(HotKey hk = null)
             {
+
+                if (hk == null)
+                {
+                    hotKey = new HotKey(AppFileManager.FileViewPath + "\\" + "hello.chkey");    
+                }
+
                 hotKey = hk;
 
-                NotifyKeysChanged = new Action<int, IntPtr, KeyBoardTool.KeyboardHookStruct>((n, w, i) =>
+                HotKey.CancelRecord += (s, e) =>
+                {
+                    OnPropertyChanged("RecordHotKeyState");
+                };
+
+                NotifyKeysChanged = new Action<int, IntPtr, KeyBoardTool.KeyStruct>((n, w, i) =>
                 {
                     OnPropertyChanged("Keys");
                 });
                 KeyBoardTool.HotKeyFunctions += NotifyKeysChanged;
-            }
-
-            public HotKeyViewModel()
-            {
-                hotKey = new HotKey(AppFileManager.FileViewPath + "\\" + "hello.chkey");
             }
 
             ~HotKeyViewModel() 
