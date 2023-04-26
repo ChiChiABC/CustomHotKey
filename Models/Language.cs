@@ -139,9 +139,9 @@ namespace CustomHotKey.Models
             public string text_input_folder_name { get; set; }
             public string text_input_name { get; set; }
             public string text_will_permanently_delete { get; set; }
-            public string text_click_record_hot_key { get; set; }
-            public string text_click_cancel_record_hot_key { get; set; }
-            public string text_click_record_or_cancel_hot_key { get; set; }
+            public string text_click_record { get; set; }
+            public string text_press_space_cancel_record { get; set; }
+            public string text_click_record_or_cancel_record { get; set; }
             public string text_retain_command_line_window { get; set; }
             public string text_hidden_to_tray { get; set; }
             public string text_close_window { get; set; }

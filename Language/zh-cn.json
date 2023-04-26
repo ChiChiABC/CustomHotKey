@@ -17,8 +17,8 @@
     "text_ms": "毫秒",
     "text_setting": "设置",
     "text_will_permanently_delete": " 将被永久删除",
-    "text_click_record_hot_key": "点击此处记录热键...",
-    "text_click_cancel_record_hot_key": "点击此处取消记录热键...",
+    "text_click_record": "点击记录...",
+    "text_press_space_cancel_record": "按\"空格\"取消记录...",
     "text_hidden_to_tray": "隐藏到托盘",
     "text_close_window": "关闭窗口",
     "menu_file": "文件 (_F)",
@@ -36,6 +36,6 @@
     "command_openfile": "打开文件",
     "command_runcommand": "运行命令",
     "command_keymap": "映射按键",
-    "text_click_record_or_cancel_hot_key": "点击录制或取消录制快捷键...",
+    "text_click_record_or_cancel_record": "点击记录或取消记录",
     "text_retain_command_line_window": "保留命令行窗口"
 }

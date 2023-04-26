@@ -17,8 +17,8 @@
     "text_ms": "MS",
     "text_setting": "Setting",
     "text_will_permanently_delete": " Will permanently delete",
-    "text_click_record_hot_key": "Click here record hot key",
-    "text_click_cancel_record_hot_key": "Click here cancel record hot key",
+    "text_click_record": "Click record...",
+    "text_press_space_cancel_record": "Press \"space\" cancel record...",
     "text_hidden_to_tray": "Hidden to tray",
     "text_close_window": "Close window",
     "menu_file": "File (_F)",
@@ -36,6 +36,6 @@
     "command_openfile": "Open file",
     "command_runcommand": "Run command",
     "command_keymap": "Remap keys",
-    "text_click_record_or_cancel_hot_key": "Click record or cancel record hot key",
+    "text_click_record_or_cancel_record": "Click record or cancel record",
     "text_retain_command_line_window": "Retain command line window"
 }
