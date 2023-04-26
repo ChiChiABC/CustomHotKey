@@ -49,8 +49,10 @@
 
         <TextBlock x:Name="tb" FontSize="12" Margin="6"
                    Foreground="{DynamicResource Control.DefaultForeground}"
-                   HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="{Binding Lang.text_click_record_or_cancel_hot_key}"/>
+                   HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="{Binding Lang.text_click_record_or_cancel_record}"/>
         <Button Command="{Binding ChangeRecordKey}"
+                                    x:Name="btn"
+                                    Focusable="False"
                                     BorderThickness="3"
                                     Background="Transparent" 
                                     Padding="5"

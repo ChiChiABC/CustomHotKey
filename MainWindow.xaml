@@ -490,10 +490,10 @@
                                     <Style TargetType="TextBlock">
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding RecordHotKeyState}" Value="True">
-                                                <Setter Property="Text" Value="{Binding Lang.text_click_cancel_record_hot_key, ElementName=mwvm}"/>
+                                                <Setter Property="Text" Value="{Binding Lang.text_press_space_cancel_record, ElementName=mwvm}"/>
                                             </DataTrigger>
                                             <DataTrigger Binding="{Binding RecordHotKeyState}" Value="False">
-                                                <Setter Property="Text" Value="{Binding Lang.text_click_record_hot_key, ElementName=mwvm}"/>
+                                                <Setter Property="Text" Value="{Binding Lang.text_click_record, ElementName=mwvm}"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
@@ -506,7 +506,7 @@
                                     Padding="5"
                                     Grid.Row="1"
                                     HorizontalContentAlignment="Center" 
-                                    VerticalContentAlignment="Bottom">
+                                    VerticalContentAlignment="Bottom" Focusable="False">
                                 <Button.Style>
                                     <Style TargetType="Button">
                                         <Setter Property="Template">
