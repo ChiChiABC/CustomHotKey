@@ -18,7 +18,6 @@ namespace CustomHotKey.Models
         /// 卸载函数
         /// </summary>
         public static void StartUnInstaller() {
-            Console.WriteLine(Environment.Is64BitOperatingSystem);
             CancelBindingFile();
             DeleteDir();
             DeleteExe();

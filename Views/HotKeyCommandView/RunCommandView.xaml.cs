@@ -61,7 +61,7 @@ namespace CustomHotKey.Views.HotKeyCommandView
 
             int selectedItemIndex = sourceCollection.IndexOf(selectedItem);
 
-            if (selectedItemIndex < sourceCollection.Count -1)
+            if (selectedItemIndex < sourceCollection.Count - 1)
             {
                 SwapElement<CommandItem>(sourceCollection, selectedItemIndex, selectedItemIndex + 1);
                 this.ArgsLB.SelectedIndex = selectedItemIndex;
@@ -85,7 +85,8 @@ namespace CustomHotKey.Views.HotKeyCommandView
             if (e.Delta > 0)
             {
                 (sender as ScrollViewer).LineUp();
-            } else
+            }
+            else
             {
                 (sender as ScrollViewer).LineDown();
             }

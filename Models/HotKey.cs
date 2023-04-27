@@ -133,7 +133,7 @@ namespace CustomHotKey.Models
             });
             RecordHotKeyFunction = new Action<int, IntPtr, KeyBoardTool.KeyStruct>((i, wp, ip) =>
             {
-                if (ip.vkCode == (int)Keys.Space && KeyBoardTool.NowPressKey.Count == 1)
+                if (ip.keyCode == (int)Keys.Space && KeyBoardTool.NowPressKey.Count == 1)
                 {
                     recordHotKeyState = false;
                     CancelRecord?.Invoke(null, new EventArgs());
@@ -145,9 +145,9 @@ namespace CustomHotKey.Models
                     {
                         this.jsonData.Keys.Clear();
                     }
-                    if (!this.jsonData.Keys.Contains(ip.vkCode))
+                    if (!this.jsonData.Keys.Contains(ip.keyCode))
                     {
-                        this.jsonData.Keys.Add(ip.vkCode);
+                        this.jsonData.Keys.Add(ip.keyCode);
                     }
                     overrideOldKey = false;
                 }

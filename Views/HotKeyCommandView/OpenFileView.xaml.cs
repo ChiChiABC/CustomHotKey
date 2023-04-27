@@ -42,7 +42,6 @@ namespace CustomHotKey.Views.HotKeyCommandView
             foreach (var item in ofd.FileNames)
             {
                 AddFileToArgsLBSource(item);
-                Console.WriteLine(item);
             }
 
         }
