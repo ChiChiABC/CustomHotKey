@@ -18,30 +18,64 @@ namespace CustomHotKey.Models
         public static List<int> NowPressKey = new List<int>();
 
         /// <summary>
-        /// 描述当前按键的结构体
+        /// 键盘按键的结构
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
+        private class KeyBoardStruct
+        {
+            public int vkCode;
+            public int scanCode;
+            public uint flags;
+            public uint time;
+            IntPtr dwExtraInfo;
+        }
+
+        /// <summary>
+        /// 键盘按键的结构
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
+        private class MouseStruct
+        {
+            public POINT pt;
+            public int mouseData;
+            public uint flags;
+            public uint time;
+            IntPtr dwExtraInfo;
+        }
+
+        /// <summary>
+        /// 描述当前按键的结构, 将键盘按键和鼠标按键结构用到的信息整合起来
         /// </summary>
         [StructLayout(LayoutKind.Sequential)]
         public class KeyStruct
 
         {
-            public int vkCode;
+            // 键码
+            public int keyCode;
 
-            public int scanCode;
+            // 数据
+            public int data;
 
-            public int flags;
+            // 位置
+            public POINT pt;
 
-            public int time;
+            // 时间
+            public uint time;
+        }
 
-            public int dwExtraInfo;
-
+        [StructLayout(LayoutKind.Sequential)]
+        public class POINT {
+            public uint x;
+            public uint y;
         }
 
         public const int WM_KEYUP = 0x0101;
         public const int WM_KEYDOWN = 0x0100;
         public const int LBUTTON = 513;
         public const int MBUTTON = 519;
+        public const int MBUTTON_WHEEL = 522;
         public const int RBUTTON = 516;
-        public const int XBUTTON1 = 523;
+        public const int XBUTTON = 523;
 
         /// <summary>
         /// 全局键盘钩子
@@ -62,13 +96,20 @@ namespace CustomHotKey.Models
         /// </summary>
         private static HookProc keyBoardHookProc = (int nCode, IntPtr wParam, IntPtr iparam) =>
         {
-            KeyBoardTool.KeyStruct keyData =
-                        (KeyBoardTool.KeyStruct)
-                            Marshal.PtrToStructure(iparam, typeof(KeyBoardTool.KeyStruct));
-            
+            KeyBoardTool.KeyBoardStruct iData =
+                        (KeyBoardTool.KeyBoardStruct)
+                            Marshal.PtrToStructure(iparam, typeof(KeyBoardTool.KeyBoardStruct));
+            KeyStruct keyData = new KeyStruct()
+            {
+                keyCode = iData.vkCode,
+                data = iData.scanCode,
+                pt = null,
+                time = iData.time
+            };
+
             if ((int)wParam != WM_KEYUP)
             {
-                NowPressKey.Add(keyData.vkCode);
+                NowPressKey.Add(keyData.keyCode);
             }
 
             if ((int)wParam == WM_KEYUP)
@@ -83,27 +124,54 @@ namespace CustomHotKey.Models
 
         private static HookProc MouseHookProc = (int nCode, IntPtr wParam, IntPtr iparam) =>
         {
+            KeyBoardTool.MouseStruct iData =
+                        (KeyBoardTool.MouseStruct)
+                            Marshal.PtrToStructure(iparam, typeof(KeyBoardTool.MouseStruct));
 
-            KeyStruct keyData = new KeyStruct();
+            KeyStruct keyData = new KeyStruct()
+            {
+                data = iData.mouseData,
+                pt = iData.pt,
+                time = iData.time
+            };
+
+            Console.WriteLine(wParam);
 
             switch ((int)wParam)
             {
+                
                 case LBUTTON:
-                    keyData.vkCode = (int)Keys.LButton;
+                    keyData.keyCode = (int)Keys.LButton;
                     break;
                 case MBUTTON:
-                    keyData.vkCode = (int)Keys.MButton;
+                    keyData.keyCode = (int)Keys.MButton;
                     break;
                 case RBUTTON:
-                    keyData.vkCode = (int)Keys.RButton;
+                    keyData.keyCode = (int)Keys.RButton;
                     break;
-                case XBUTTON1:
-                    keyData.vkCode = (int)Keys.XButton1;
+                case XBUTTON:
+                    if (keyData.data == 131072)
+                    {
+                        keyData.keyCode = (int)Keys.XButton1;
+                    }
+                    else
+                    {
+                        keyData.keyCode = (int)Keys.XButton2;
+                    }
+                    break;
+                case MBUTTON_WHEEL:
+                    if (keyData.data < 0)
+                    {
+                        keyData.keyCode = (int)Keys.Down;
+                    }
+                    else
+                    {
+                        keyData.keyCode = (int)Keys.Up;
+                    }
                     break;
                 default:
                     break;
             }
-
             switch ((int)wParam)
             {
                 case 512:
@@ -111,7 +179,8 @@ namespace CustomHotKey.Models
                 case LBUTTON:
                 case MBUTTON:
                 case RBUTTON:
-                case XBUTTON1:
+                case XBUTTON:
+                case MBUTTON_WHEEL:
                     wParam = (IntPtr)WM_KEYDOWN;
                     break;
                 default:
@@ -119,12 +188,10 @@ namespace CustomHotKey.Models
                     break;
             }
 
-            if ((int)wParam != WM_KEYUP && !NowPressKey.Contains(keyData.vkCode))
+            if ((int)wParam != WM_KEYUP && !NowPressKey.Contains(keyData.keyCode))
             {
-                NowPressKey.Add(keyData.vkCode);
-            }
-
-            if ((int)wParam == WM_KEYUP)
+                NowPressKey.Add(keyData.keyCode);
+            } else
             {
                 NowPressKey.Clear();
             }
@@ -182,7 +249,6 @@ namespace CustomHotKey.Models
                     keyName = Enum.GetName(typeof(Keys), key).Split('R').Last();
                 }
 
-                Console.WriteLine(keyName);
 
                 if (keyName != null)
                 {
