@@ -52,7 +52,9 @@ namespace CustomHotKey
                         item.SaveJSONData();
                     }
 
-                    if (ea.MessageID == id && ((bool)ea.Args[0]))
+                    if (ea.MessageID != id) return;
+
+                    if (((bool)ea.Args[0]))
                     {
                         notifyIcon.Visible = true;
 
