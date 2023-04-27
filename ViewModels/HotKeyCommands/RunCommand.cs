@@ -76,7 +76,6 @@ namespace CustomHotKey.ViewModels.HotKeyCommands
         public override void Invoke()
         {
             base.Invoke();
-            Console.WriteLine(RetainWindow);
             string tempCommand = "";
 
             tempCommand = (this.RetainWindow ? "/k " : "/c ");

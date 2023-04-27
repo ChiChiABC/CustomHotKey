@@ -65,7 +65,7 @@ namespace CustomHotKey.ViewModels.HotKeyCommands
         void RecordKeyFunction(int nCode, IntPtr wp, KeyBoardTool.KeyStruct ip)
         {
 
-            if (Enum.GetName(typeof(Keys), ip.vkCode).Contains("Button"))
+            if (Enum.GetName(typeof(Keys), ip.keyCode).Contains("Button"))
             {
                 return;
             }
@@ -77,12 +77,12 @@ namespace CustomHotKey.ViewModels.HotKeyCommands
                 }
                 overrideOldKeys = false;
 
-                if (Keys.Contains(Enum.GetName(typeof(Keys), ip.vkCode)))
+                if (Keys.Contains(Enum.GetName(typeof(Keys), ip.keyCode)))
                 {
                     return;
                 }
 
-                Keys.Add(Enum.GetName(typeof(Keys), ip.vkCode));
+                Keys.Add(Enum.GetName(typeof(Keys), ip.keyCode));
             }
             else
             {
