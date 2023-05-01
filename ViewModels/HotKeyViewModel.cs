@@ -6,6 +6,9 @@ using System.Windows.Forms;
 using CustomHotKey.ViewModels.HotKeyCommands;
 using CommunityToolkit.Mvvm.Messaging;
 using CustomHotKey.Properties;
+using CommunityToolkit.Mvvm.Input;
+using CustomHotKey.Views.Dialog;
+using System.Collections.Generic;
 
 namespace CustomHotKey.ViewModels
 {
@@ -17,6 +20,26 @@ namespace CustomHotKey.ViewModels
         /// </summary>
         public class HotKeyViewModel : ObservableObject
         {
+
+            public RelayCommand DeleteCommandItem { get; set; }
+            public RelayCommand AddCommandItem { get; set; }
+
+
+            private HotKeyCommandItem selectedCommandItem;
+
+            /// <summary>
+            /// 当前选中的<see cref="HotKeyCommandItem"/>
+            /// </summary>
+            public HotKeyCommandItem SelectedCommandItem
+            {
+                get { return selectedCommandItem; }
+                set { 
+                    selectedCommandItem = value;
+                    if (selectedCommandItem == null) return;
+                    Console.WriteLine(selectedCommandItem.Command);
+                    OnPropertyChanged("SelectedCommandItem");
+                }
+            }
 
             /// <summary>
             /// 记录热键状态
@@ -78,6 +101,19 @@ namespace CustomHotKey.ViewModels
             }
 
             /// <summary>
+            /// 包装<see cref="HotKey.HotKeyJSON.Commands"/>
+            /// </summary>
+            public ObservableCollection<HotKeyCommandItem> Commands 
+            { 
+                get {
+                    return hotKey.JSONData.Commands;
+                }
+                set {
+                    hotKey.JSONData.Commands = value;
+                }
+            }
+
+            /// <summary>
             /// 包装<see cref="HotKey.HotKeyJSON.Keys"/>
             /// </summary>
             public ObservableCollection<string> Keys
@@ -105,36 +141,6 @@ namespace CustomHotKey.ViewModels
                     return tempList;
                 }
             }
-            
-            /// <summary>
-            /// 包装<see cref="HotKey.HotKeyJSON.CommandType"/>
-            /// </summary>
-            public int CommandIndex
-            {
-                get
-                {
-                    int temp = 0;
-                    for (int i = 0; i < HotKeyCommand.CommandTypes.Length; i++)
-                    {
-                        if (hotKey.JSONData.CommandType == HotKeyCommand.CommandTypes[i].Name)
-                        {
-                            temp = i;
-                            break;
-                        }
-                    }
-                    return temp;
-                }
-                set
-                {
-                    if (value != -1)
-                    {
-                        hotKey.JSONData.CommandType = HotKeyCommand.CommandTypes[value].Name;
-                        OnPropertyChanged();
-                        HotKey.UpdateJSONCommand(hotKey.JSONData);
-                        hotKey.SaveJSONData();
-                    }
-                }
-            }
 
             /// <summary>
             /// 包装<see cref="HotKey.HotKeyJSON.Description"/>
@@ -154,31 +160,6 @@ namespace CustomHotKey.ViewModels
             }
 
             /// <summary>
-            /// 包装<see cref="HotKey.UpdateJSONCommand(HotKey.HotKeyJSON, bool)"/>方法，传入自身的<see cref="hotKey"/> 
-            /// (更新<see cref="hotKey"/>的Command)
-            /// </summary>
-            public void UpdateJSONCommand()
-            {
-                HotKey.UpdateJSONCommand(hotKey.JSONData);
-            }
-
-            /// <summary>
-            /// 包装<see cref="HotKey.HotKeyJSON.com"/>
-            /// </summary>
-            public HotKeyCommand Command
-            {
-                get
-                {
-                    return hotKey.JSONData.Command;
-                }
-                set
-                {
-                    hotKey.JSONData.Command = value;
-                    OnPropertyChanged();
-                }
-            }
-
-            /// <summary>
             /// 当有按键操作时，通知View，<see cref="HotKey.HotKeyJSON.Keys"/>已更改
             /// </summary>
             Action<int, IntPtr, KeyBoardTool.KeyStruct> NotifyKeysChanged;
@@ -186,12 +167,12 @@ namespace CustomHotKey.ViewModels
             public HotKeyViewModel(HotKey hk = null)
             {
 
+                hotKey = hk;
+
                 if (hk == null)
                 {
                     hotKey = new HotKey(AppFileManager.FileViewPath + "\\" + "hello.chkey");    
                 }
-
-                hotKey = hk;
 
                 HotKey.CancelRecord += (s, e) =>
                 {
@@ -203,6 +184,35 @@ namespace CustomHotKey.ViewModels
                     OnPropertyChanged("Keys");
                 });
                 KeyBoardTool.HotKeyFunctions += NotifyKeysChanged;
+
+                DeleteCommandItem = new RelayCommand(() => 
+                {
+                    if (SelectedCommandItem == null) return;
+
+                    if (hotKey.JSONData.Commands.Count == 1)
+                    {
+                        DialogMessage.SendMessage(this, "Message", "命令项最少要有一个！", "error");
+                        return;
+                    }
+
+                    hotKey.JSONData.Commands.Remove(SelectedCommandItem);
+                });
+                AddCommandItem = new RelayCommand(() => 
+                {
+                    SelectCommandTypeDialog sctd = new SelectCommandTypeDialog();
+                    sctd.ShowDialog();
+
+                    if (sctd.CommandType == null) return;
+
+                    hotKey.JSONData.Commands.Add(
+                        new HotKeyCommandItem() {
+                            Open = false,
+                            CommandType = HotKeyCommandItem.commandTypes[sctd.commandTypeNames.SelectedIndex].Name,
+                            Command = (HotKeyCommand)Activator.CreateInstance(sctd.CommandType, new List<string>())
+
+                        }
+                    );
+                });
             }
 
             ~HotKeyViewModel() 

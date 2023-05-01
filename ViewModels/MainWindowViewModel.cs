@@ -106,24 +106,6 @@ namespace CustomHotKey.ViewModels
         }
 
         /// <summary>
-        /// 将<see cref="HotKeyCommand.CommandTypes"/>中所有元素的Name属性转换成多语言文本作为集合暴露给View
-        /// </summary>
-        public string[] HotKeyCommandTypeNames
-        {
-            get
-            {
-                string[] temp = new string[HotKeyCommand.CommandTypes.Length];
-                for (int i = 0; i < temp.Length; i++)
-                {
-                    temp[i] = (string)typeof(Language.LanguageJSON).GetProperty(
-                        "command_" + HotKeyCommand.CommandTypes[i].Name.ToLower()
-                    ).GetValue(Lang);
-                }
-                return temp;
-            }
-        }
-
-        /// <summary>
         /// 添加文件的命令
         /// </summary>
         public RelayCommand AddFile { get; set; }
@@ -302,7 +284,7 @@ namespace CustomHotKey.ViewModels
                     {
                         if (e.MessageID == id && ((bool)e.Args[0]) == true)
                         {
-                            AppFileManager.DeleteFileItem(SelectedFileItem);
+                            AppFileManager.DeleteFileItem(selectedFileItem);
                             SelectedFileItem = null;
 
                         }
@@ -330,7 +312,14 @@ namespace CustomHotKey.ViewModels
             });
             UnInstaller = new RelayCommand(() =>
             {
-                Models.UnInstaller.StartUnInstaller();
+                int id = DialogMessage.SendMessage(this, "Message", Lang.text_this_operation_cannot_be_undone, "warning");
+                DialogMessage.Return += (object sender, ReceiveEventArgs e) =>
+                {
+                    if (id == e.MessageID && (bool)e.Args[0])
+                    {
+                        Models.UnInstaller.StartUnInstaller();
+                    }
+                };
             });
 
             // 初始化主题
