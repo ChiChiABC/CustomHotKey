@@ -26,7 +26,7 @@ namespace CustomHotKey.Models
             public int vkCode;
             public int scanCode;
             public uint flags;
-            public uint time;
+            public long time;
             IntPtr dwExtraInfo;
         }
 
@@ -39,7 +39,7 @@ namespace CustomHotKey.Models
             public POINT pt;
             public int mouseData;
             public uint flags;
-            public uint time;
+            public long time;
             IntPtr dwExtraInfo;
         }
 
@@ -47,24 +47,35 @@ namespace CustomHotKey.Models
         /// 描述当前按键的结构, 将键盘按键和鼠标按键结构用到的信息整合起来
         /// </summary>
         [StructLayout(LayoutKind.Sequential)]
-        public class KeyStruct
+        public struct KeyStruct
 
         {
+            public SenderType senderType { get; set; }
+
+            public int flag { get; set; }
+
             // 键码
-            public int keyCode;
+            public int keyCode { get; set; }
 
             // 数据
-            public int data;
+            public int data { get; set; }
 
             // 位置
-            public POINT pt;
+            public POINT pt { get; set; }
 
             // 时间
-            public uint time;
+            public long time { get; set; }
+        }
+
+        public enum SenderType : byte
+        {
+            KeyBoard = 0,
+            Mouse = 1,
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public class POINT {
+        public class POINT
+        {
             public uint x;
             public uint y;
         }
@@ -76,6 +87,25 @@ namespace CustomHotKey.Models
         public const int MBUTTON_WHEEL = 522;
         public const int RBUTTON = 516;
         public const int XBUTTON = 523;
+
+
+        public enum MouseEventFlag
+        {
+            Move = 0x0001,
+            LeftDown = 0x0002,
+            LeftUp = 0x0004,
+            RightDown = 0x0008,
+            RightUp = 0x0010,
+            MiddleDown = 0x0020,
+            MiddleUp = 0x0040,
+            XDown = 0x0080,
+            XUp = 0x0100,
+            Wheel = 0x0800,
+            VirtualDesk = 0x4000,
+            Absolute = 0x8000
+
+        }
+
 
         /// <summary>
         /// 全局键盘钩子
@@ -101,11 +131,15 @@ namespace CustomHotKey.Models
                             Marshal.PtrToStructure(iparam, typeof(KeyBoardTool.KeyBoardStruct));
             KeyStruct keyData = new KeyStruct()
             {
+                flag = (int)wParam,
+                senderType = SenderType.KeyBoard,
                 keyCode = iData.vkCode,
                 data = iData.scanCode,
                 pt = null,
                 time = iData.time
             };
+            keyData.time = (long)(DateTime.UtcNow -
+                    new DateTime(1970, 1, 1, 0, 0, 0)).TotalMilliseconds;
 
             if ((int)wParam != WM_KEYUP)
             {
@@ -130,16 +164,19 @@ namespace CustomHotKey.Models
 
             KeyStruct keyData = new KeyStruct()
             {
+                flag = (int)wParam,
+                senderType = SenderType.Mouse,
                 data = iData.mouseData,
                 pt = iData.pt,
                 time = iData.time
             };
 
-            Console.WriteLine(wParam);
+            keyData.time = (long)(DateTime.UtcNow -
+                    new DateTime(1970, 1, 1, 0, 0, 0)).TotalMilliseconds;
 
             switch ((int)wParam)
             {
-                
+
                 case LBUTTON:
                     keyData.keyCode = (int)Keys.LButton;
                     break;
@@ -191,7 +228,8 @@ namespace CustomHotKey.Models
             if ((int)wParam != WM_KEYUP && !NowPressKey.Contains(keyData.keyCode))
             {
                 NowPressKey.Add(keyData.keyCode);
-            } else
+            }
+            else
             {
                 NowPressKey.Clear();
             }
@@ -221,13 +259,20 @@ namespace CustomHotKey.Models
 
         // 模拟键盘事件
         [DllImport("user32.dll", EntryPoint = "keybd_event", SetLastError = true)]
-
         public static extern void keybd_event(
              byte bVk,    // 虚拟键值
-             byte bScan, 
+             byte bScan,
              int dwFlags,  // 0 为按下，2为释放
-             int dwExtraInfo  
+             int dwExtraInfo
         );
+
+        // 模拟鼠标事件
+        [DllImport("user32.dll", EntryPoint = "mouse_event", SetLastError = true)]
+        public static extern void mouse_event(int dwFlags, int dx, int dy, int dwData, int dwExtrainfo);// 模拟鼠标事件
+        
+        // 设置鼠标位置
+        [DllImport("user32.dll")]
+        public static extern void SetCursorPos(int x, int y);
 
         /// <summary>
         /// 将带有LR前缀的键码转换为不带有LR前缀的键码
@@ -278,7 +323,7 @@ namespace CustomHotKey.Models
                 0);
 
             // 安装鼠标钩子
-            MouseHook = 
+            MouseHook =
             SetWindowsHookEx(WH_MOUSE_LL,
                 MouseHookProc,
                 Marshal.GetHINSTANCE(System.Reflection.
