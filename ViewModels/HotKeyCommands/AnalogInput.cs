@@ -144,7 +144,9 @@ namespace CustomHotKey.ViewModels.HotKeyCommands
                     case KeyBoardTool.MBUTTON + 1:
                         flag = (int)MouseEventFlag.MiddleUp;
                         break;
-
+                    case KeyBoardTool.MBUTTON_WHEEL:
+                        flag = (int)MouseEventFlag.Wheel;
+                        break;
                     default:
                         break;
                 }
