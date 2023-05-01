@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,6 +18,7 @@ namespace CustomHotKey.Models
     /// </summary>
     public static class Language
     {
+        public static event EventHandler LangChanged;
 
         /// <summary>
         /// 此实例提供实时的多语言文本
@@ -64,6 +66,7 @@ namespace CustomHotKey.Models
                         break;
                     }
                 }
+                LangChanged?.Invoke(null, new EventArgs());
             }
         }
 
@@ -150,6 +153,12 @@ namespace CustomHotKey.Models
             public string text_times { get; set; }
             public string text_ms { get; set; }
             public string text_setting { get; set; }
+            public string text_this_operation_cannot_be_undone { get; set; }
+            public string text_uninstaller { get; set; }
+            public string text_delete_selected_command_item { get; set; }
+            public string text_add_command_item { get; set; }
+            public string text_clear { get; set; }
+            public string text_press_esc_cancel_record { get; set; }
             public string menu_file { get; set; }
             public string menu_folder { get; set; }
             public string menu_select_directory { get; set; }
@@ -165,6 +174,7 @@ namespace CustomHotKey.Models
             public string command_openfile { get; set; }
             public string command_runcommand { get; set; }
             public string command_keymap { get; set; }
+            public string command_analoginput { get; set; }
         }
     }
 }

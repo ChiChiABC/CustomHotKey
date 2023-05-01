@@ -21,6 +21,12 @@
     "text_press_space_cancel_record": "Press \"space\" cancel record...",
     "text_hidden_to_tray": "Hidden to tray",
     "text_close_window": "Close window",
+    "text_this_operation_cannot_be_undone": "This operation cannot be undone!",
+    "text_uninstaller": "Uninstaller",
+    "text_delete_selected_command_item": "Delete selected command item",
+    "text_add_command_item": "Add command item",
+    "text_clear": "Clear",
+    "text_press_esc_cancel_record": "Press \"esc\" cancel record...",
     "menu_file": "File (_F)",
     "menu_folder": "Folder (_D)",
     "menu_select_directory": "Select directory (_P)",
@@ -36,6 +42,7 @@
     "command_openfile": "Open file",
     "command_runcommand": "Run command",
     "command_keymap": "Remap keys",
+    "command_analoginput": "Analog input",
     "text_click_record_or_cancel_record": "Click record or cancel record",
     "text_retain_command_line_window": "Retain command line window"
 }
