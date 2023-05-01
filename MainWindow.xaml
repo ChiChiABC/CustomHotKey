@@ -7,8 +7,9 @@
         xmlns:m="clr-namespace:CustomHotKey.Models"
         xmlns:vm="clr-namespace:CustomHotKey.ViewModels"
         xmlns:s="clr-namespace:System.Windows;assembly=PresentationFramework"
+        xmlns:hkc="clr-namespace:CustomHotKey.ViewModels.HotKeyCommands"
         mc:Ignorable="d"
-        Title="{Binding Lang.title_window}" Height="500" Width="800" MinHeight="480" MinWidth="700" 
+        Title="{Binding Lang.title_window}" Height="560" Width="800" MinHeight="480" MinWidth="789" 
         TextOptions.TextFormattingMode="Display"
         UseLayoutRounding="True"
         Foreground="{DynamicResource Window.DefaultForeground}"
@@ -239,7 +240,7 @@
                         </Button.Content>
                     </Button>
 
-                    <TextBlock Text="{Binding Lang.text_language}"
+                    <TextBlock Text="{Binding Lang.text_language}" Width="80"
                             Margin="8, 0" VerticalAlignment="Center"/>
 
                     <ComboBox SelectedValue="{Binding SelectedLanguageName}" 
@@ -263,7 +264,7 @@
                         </Button.Content>
                     </Button>
                     
-                    <TextBlock Text="{Binding Lang.text_theme}"
+                    <TextBlock Text="{Binding Lang.text_theme}" Width="80"
                             Margin="8, 0" VerticalAlignment="Center"/>
 
                     <ComboBox SelectedValue="{Binding Theme}" 
@@ -286,7 +287,7 @@
                             </Rectangle>
                         </Button.Content>
                     </Button>
-                    <Button Content="卸载" Width="164" Margin="6, 0" Command="{Binding UnInstaller}"/>
+                    <Button Content="{Binding Lang.text_uninstaller}" Width="164" Margin="6, 0" Command="{Binding UnInstaller}"/>
                 </StackPanel>
             </MenuItem>
         </Menu>
@@ -417,14 +418,17 @@
             </GroupBox>
         </Grid>
         <Grid Grid.Row="1" Grid.Column="2" Margin="0, 0, 4, 4">
+            <Grid.Resources>
+            
+            </Grid.Resources>
             <GroupBox x:Name="EditView" Header="{Binding Lang.title_edit_view, ElementName=mwvm}"
               DataContext="{Binding SelectedHotKey}">
                 <Grid Margin="3">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition/>
+                        <RowDefinition Height="200"/>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="140"/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Border BorderBrush="{DynamicResource Window.DefaultBorderBrush}" BorderThickness="1" 
                             Height="36" VerticalAlignment="Top" CornerRadius="3">
@@ -484,7 +488,7 @@
                                      AcceptsReturn="True" MaxHeight="64"
                                      Height="Auto" Padding="4" BorderBrush="Transparent"/>
 
-                            <TextBlock FontSize="14" Grid.Row="1" Margin="18"
+                            <TextBlock FontSize="14" Grid.Row="1" Margin="10"
                                        HorizontalAlignment="Center" VerticalAlignment="Bottom">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
@@ -607,7 +611,7 @@
                                 </ListBox>
                             </StackPanel>
 
-                            <DockPanel Grid.Row="2">
+                            <DockPanel Grid.Row="2"  Background="{DynamicResource Control.DefaultBackground}">
                                 <CheckBox Margin="8, 2" IsChecked="{Binding Open}" 
                                           Content="{Binding Lang.edit_view_open, ElementName=mwvm}" 
                                           Foreground="{DynamicResource Control.DefaultForeground}"
@@ -619,25 +623,69 @@
                                           Foreground="{DynamicResource Control.DefaultForeground}" 
                                           DockPanel.Dock="Left" VerticalAlignment="Bottom"/>
 
-                                <StackPanel 
-                                    DockPanel.Dock="Right" Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Lang.edit_view_task,
-                                                          ElementName=mwvm}" VerticalAlignment="Center"/>
-                                    <ComboBox DockPanel.Dock="Right" Height="24"  Name="EditCommandViewCB"
-                                              MinWidth="100"
-                                              ItemsSource="{Binding HotKeyCommandTypeNames, ElementName=mwvm}"
-                                              SelectionChanged="ComboBox_SelectionChanged"
-                                              SelectedIndex="{Binding CommandIndex}"/>
-                                </StackPanel>
-
                                 <UserControl/>
                             </DockPanel>
+
                         </Grid>
                     </Border>
-                    <Border x:Name="CommandDataContext" DataContext="{Binding Command}"
-                        Grid.Row="3" BorderBrush="{DynamicResource Window.DefaultBorderBrush}" BorderThickness="1" CornerRadius="0, 0, 3, 3">
-                        <Frame x:Name="EditCommandView" NavigationUIVisibility="Hidden"/>
-                    </Border>
+
+                    <Grid Grid.Row="2" Grid.RowSpan="2" Height="52" VerticalAlignment="Top">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="32"/>
+                            <ColumnDefinition Width="32"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Command="{Binding AddCommandItem}" ToolTip="{Binding Lang.text_add_command_item, ElementName=mwvm}"
+                        Grid.Column="2" Height="32" Width="32" VerticalAlignment="Top" HorizontalAlignment="Right" Panel.ZIndex="1">
+                            <TextBlock Text="+" FontSize="18">
+                                <TextBlock.RenderTransform>
+                                    <TranslateTransform Y="-3"/>
+                                </TextBlock.RenderTransform>
+                            </TextBlock>
+                        </Button>
+
+                        <Button Grid.Column="1" Height="32" Width="32" Panel.ZIndex="1" Command="{Binding DeleteCommandItem}"
+                        ToolTip="{Binding Lang.text_delete_selected_command_item, ElementName=mwvm}"
+                        VerticalAlignment="Top" HorizontalAlignment="Right">
+                            <Rectangle Height="18" Width="18">
+                                <Rectangle.Fill>
+                                    <DrawingBrush>
+                                        <DrawingBrush.Drawing>
+                                            <GeometryDrawing Brush="{DynamicResource Control.DefaultForeground}"
+                                            Geometry="{StaticResource unInstaller}"/>
+                                        </DrawingBrush.Drawing>
+                                    </DrawingBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                        </Button>
+
+                        <ListBox Background="Transparent" SelectedItem="{Binding SelectedCommandItem}" 
+                            ItemsSource="{Binding Commands}" Grid.Column="0" ScrollViewer.HorizontalScrollBarVisibility="Visible">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Background="{DynamicResource Control.DefaultBackground}" MinWidth="120" Height="26">
+                                        <DockPanel Height="20">
+                                            <TextBlock  Text="{Binding CommandName}" Margin="10, 0, 10, 0" DockPanel.Dock="Right" Height="16"
+                                                Foreground="{DynamicResource Control.DefaultForeground}"/>
+                                            <CheckBox IsChecked="{Binding Open}" Content="{Binding Lang.edit_view_open, ElementName=mwvm}" DockPanel.Dock="Right"/>
+
+                                            <ContentControl/>
+                                        </DockPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                    <Grid DataContext="{Binding SelectedCommandItem.Command}" Grid.Row="2" Grid.RowSpan="2" Margin="0, 54, 0, 0">
+                        <Frame Source="{Binding SelectedHotKey.SelectedCommandItem.CommandViewPath, 
+                            ElementName=mwvm}" NavigationUIVisibility="Hidden"/>
+                    </Grid>
                 </Grid>
             </GroupBox>
         </Grid>

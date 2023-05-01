@@ -28,19 +28,18 @@ namespace CustomHotKey
         public MainWindow()
         {
             InitializeComponent();
-            UpdateEditCommandViewContent();
 
             this.Closing += (s, e) =>
             {
                 InitialTray();
                 e.Cancel = true;
 
-                int id = 
+                int id =
                 DialogMessage.SendMessage(this, "Message",
                     (vm.Lang.text_hidden_to_tray +
                     vm.Lang.text_or +
-                    vm.Lang.text_close_window + "? "), 
-                    "question", 
+                    vm.Lang.text_close_window + "? "),
+                    "question",
                     vm.Lang.text_hidden_to_tray, vm.Lang.text_close_window);
 
                 DialogMessage.Return += CloseingWindowFunc;
@@ -103,42 +102,6 @@ namespace CustomHotKey
                 vm.SelectedFileItem = (AppFileManager.FileItem)e.NewValue;
             }
 
-            if (this.FileViewTree.SelectedItem != null && 
-                (this.FileViewTree.SelectedItem as AppFileManager.FileItem).HotKey != null)
-            {
-                this.CommandDataContext.DataContext = vm.SelectedHotKey.Command;
-            }
         }
-
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (vm != null)
-            {
-                if (vm.SelectedHotKey != null)
-                {
-                    this.CommandDataContext.DataContext = vm.SelectedHotKey.Command;
-                }
-                if (this.EditCommandViewCB.SelectedIndex != -1)
-                {
-
-                    this.EditCommandViewCB.SelectedItem
-                        = this.EditCommandViewCB.Items[this.EditCommandViewCB.SelectedIndex];
-                }
-            }
-            UpdateEditCommandViewContent();
-        }
-
-        private void UpdateEditCommandViewContent()
-        {
-            if (this.EditCommandViewCB.SelectedItem != null)
-            {
-
-                this.EditCommandView.Navigate
-                (new Uri(
-                    ("/Views/HotKeyCommandView/" + (HotKeyCommand.CommandTypes[this.EditCommandViewCB.SelectedIndex].Name) + "View.xaml")
-                    , UriKind.Relative));
-            }
-        }
-
     }
 }
