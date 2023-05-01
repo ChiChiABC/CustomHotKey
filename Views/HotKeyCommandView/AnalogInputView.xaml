@@ -1,0 +1,54 @@
+﻿<Page x:Class="CustomHotKey.Views.HotKeyCommandView.AnalogInput"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:CustomHotKey.Views.HotKeyCommandView"
+      xmlns:m="clr-namespace:CustomHotKey.Models"
+      mc:Ignorable="d" 
+      TextOptions.TextFormattingMode="Display"
+      UseLayoutRounding="True"
+      d:DesignHeight="200" d:DesignWidth="600"
+      Title="AnalogInput">
+
+    <Grid>
+        <ListBox ItemsSource="{Binding Inputs}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Foreground" Value="{DynamicResource Control.DefaultForeground}"/>
+                            </Style>
+                        </StackPanel.Resources>
+                        <TextBlock Margin="10, 0" Text="{Binding senderType}"/>
+                        <TextBlock Margin="10, 0" Text="{Binding keyCode}"/>
+                        <TextBlock Margin="10, 0" Text="{Binding time}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Grid VerticalAlignment="Bottom" Margin="10" Height="32">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="8"/>
+                <ColumnDefinition Width="64"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="ChangeRecordButton" Command="{Binding ChangeRecord}" Grid.Column="0">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Record}" Value="True">
+                                <Setter Property="Content" Value="{Binding text_press_esc_cancel_record, Source={x:Static m:Language.Lang}}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Record}" Value="False">
+                                <Setter Property="Content" Value="{Binding text_click_record, Source={x:Static m:Language.Lang}}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button x:Name="ClearInputsButton" Content="{Binding text_clear, Source={x:Static m:Language.Lang}}" Command="{Binding ClearInputs}" Grid.Column="2"/>
+        </Grid>
+    </Grid>
+</Page>
