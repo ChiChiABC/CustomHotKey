@@ -126,14 +126,31 @@
                     <Border Name="Border"
                               Padding="2"
                               SnapsToDevicePixels="true">
-                        <ContentPresenter />
+
+                        <Grid>
+                            <Border x:Name="mBorder" Opacity="0" Background="{x:Static vm:UserThemeColor.ThemeColorBrush}"/>
+                            <ContentPresenter />
+                        </Grid>
                     </Border>
+
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsHighlighted" Value="true">
-                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource Control.DefaultBackground}"/>
-                        </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter TargetName="Border" Property="Background" Value="{x:Static vm:UserThemeColor.ThemeColorBrush}" />
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="mBorder" Storyboard.TargetProperty="Opacity"
+                                            Duration="0:0:0.2" To="1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="mBorder" Storyboard.TargetProperty="Opacity"
+                                            Duration="0:0:0.2" To="0"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

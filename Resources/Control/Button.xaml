@@ -15,7 +15,7 @@
         <Setter Property="Background" Value="{DynamicResource Control.DefaultBackground}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource Control.DefaultBorderBrush}"/>
         <Setter Property="Foreground" Value="{DynamicResource Control.DefaultForeground}"/>
-        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Padding" Value="1"/>
@@ -27,21 +27,61 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true" CornerRadius="2">
+
+                    <Grid>
+
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true" CornerRadius="2"/>
+
+                        <Border x:Name="tcBorder" Opacity="0" 
+                            Background="{DynamicResource Control.MouseOverBackground}"
+                            BorderBrush="{x:Static vm:UserThemeColor.ThemeColorBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true" CornerRadius="2"/>
+                        <Border x:Name="pBorder" Opacity="0" 
+                            Background="{DynamicResource Control.PressedBackground}"
+                            BorderBrush="{DynamicResource Control.PressedBorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true" CornerRadius="2"/>
+
                         <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                    </Border>
+                    </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsDefaulted" Value="true">
                             <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="Background" TargetName="border" Value="{DynamicResource Control.MouseOverBackground}"/>
-                            <Setter Property="BorderBrush" TargetName="border" Value="{x:Static vm:UserThemeColor.ThemeColorBrush}"/>
-                            <Setter Property="BorderThickness" TargetName="border" Value="1"/>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="tcBorder" Storyboard.TargetProperty="Opacity"
+                                            Duration="0:0:0.2" To="1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="tcBorder" Storyboard.TargetProperty="Opacity"
+                                            Duration="0:0:0.2" To="0"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
-                            <Setter Property="Background" TargetName="border" Value="{DynamicResource Control.PressedBackground}"/>
-                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource Control.PressedBorderBrush}"/>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="pBorder" Storyboard.TargetProperty="Opacity"
+                                            Duration="0:0:0.2" To="1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="pBorder" Storyboard.TargetProperty="Opacity"
+                                            Duration="0:0:0.2" To="0"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter Property="Background" TargetName="border" Value="{DynamicResource Control.DisabledBackground}"/>

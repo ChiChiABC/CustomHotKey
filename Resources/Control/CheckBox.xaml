@@ -47,12 +47,18 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Border Width="16" Height="16" CornerRadius="12"
-                            x:Name="checkBoxBorder" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="1" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
-                            <Grid x:Name="markGrid" Opacity="0">
-                                <Ellipse Width="10" Height="10" Fill="{x:Static vm:UserThemeColor.ThemeColorBrush}" Stroke="{DynamicResource Control.DefaultBorderBrush}"/>
-                                <Rectangle x:Name="indeterminateMark" Fill="{StaticResource OptionMark.Static.Glyph}" Margin="2" Opacity="0"/>
-                            </Grid>
-                        </Border>
+                            x:Name="checkBoxBorder" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="1" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+
+                        <Border Width="16" Height="16" CornerRadius="12" Opacity="0"
+                            x:Name="mCheckBoxBorder" Background="{DynamicResource Control.MouseOverBackground}" BorderBrush="{DynamicResource Control.MouseOverBorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="1" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        
+                        <Border Width="16" Height="16" CornerRadius="12" Opacity="0"
+                            x:Name="pCheckBoxBorder" Background="{DynamicResource Control.PressedBackground}" BorderBrush="{DynamicResource Control.PressedBorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="1" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+
+                        <Grid x:Name="markGrid" Opacity="0" Margin="1">
+                            <Ellipse Width="10" Height="10" Fill="{x:Static vm:UserThemeColor.ThemeColorBrush}" Stroke="{DynamicResource Control.DefaultBorderBrush}"/>
+                            <Rectangle x:Name="indeterminateMark" Fill="{StaticResource OptionMark.Static.Glyph}" Margin="2" Opacity="0"/>
+                        </Grid>
                         <ContentPresenter x:Name="contentPresenter" Grid.Column="1" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </Grid>
                     <ControlTemplate.Triggers>
@@ -61,23 +67,65 @@
                             <Setter Property="Padding" Value="4,-1,0,0"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="Background" TargetName="checkBoxBorder" Value="{DynamicResource Control.MouseOverBackground}"/>
-                            <Setter Property="BorderBrush" TargetName="checkBoxBorder" Value="{DynamicResource Control.MouseOverBorderBrush}"/>
-
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="mCheckBoxBorder" 
+                                            Storyboard.TargetProperty="Opacity" Duration="0:0:0.1" To="1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="mCheckBoxBorder" 
+                                            Storyboard.TargetProperty="Opacity" Duration="0:0:0.1" To="0"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
                         </Trigger>
+                        
+                        <Trigger Property="IsPressed" Value="true">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="pCheckBoxBorder" 
+                                            Storyboard.TargetProperty="Opacity" Duration="0:0:0.1" To="1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="pCheckBoxBorder" 
+                                            Storyboard.TargetProperty="Opacity" Duration="0:0:0.1" To="0"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter Property="Background" TargetName="checkBoxBorder" Value="{DynamicResource Control.DisabledBackground}"/>
                             <Setter Property="BorderBrush" TargetName="checkBoxBorder" Value="{DynamicResource Control.DisabledBorderBrush}"/>
                         </Trigger>
-                        <Trigger Property="IsPressed" Value="true">
-                            <Setter Property="Background" TargetName="checkBoxBorder" Value="{DynamicResource Control.PressedBackground}"/>
-                            <Setter Property="BorderBrush" TargetName="checkBoxBorder" Value="{DynamicResource Control.PressedBorderBrush}"/>
-                        </Trigger>
+
                         <Trigger Property="IsChecked" Value="true">
-                            <Setter Property="Opacity" TargetName="markGrid" Value="1"/>
-                        </Trigger>
-                        <Trigger Property="IsChecked" Value="{x:Null}">
-                            <Setter Property="Opacity" TargetName="markGrid" Value="0"/>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="markGrid" 
+                                            Storyboard.TargetProperty="Opacity" Duration="0:0:0.1" To="1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="markGrid" 
+                                            Storyboard.TargetProperty="Opacity" Duration="0:0:0.1" To="0"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

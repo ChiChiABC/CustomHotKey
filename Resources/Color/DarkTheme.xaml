@@ -5,7 +5,6 @@
     <SolidColorBrush Color="#333333" x:Key="Window.DefaultBackground"/>
     <SolidColorBrush Color="#111122" x:Key="Window.DefaultBorderBrush"/>
     <SolidColorBrush Color="#DFDFDF" x:Key="Window.DefaultForeground"/>
-
     <!-- Control -->
     <SolidColorBrush Color="#555555" x:Key="Control.DefaultBackground"/>
     <SolidColorBrush Color="#232323" x:Key="Control.DefaultBorderBrush"/>
