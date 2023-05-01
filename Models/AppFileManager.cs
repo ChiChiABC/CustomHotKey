@@ -28,7 +28,22 @@ namespace CustomHotKey.Models
         /// 新建热键文件时的默认内容
         /// </summary>
         public static string DefaultFileContent =
-            @"{""Description"":""Hello!"",""Open"":false,""DistinguishLR"": false, ""Keys"":[],""CommandType"":""OpenFile"",""Command"":{""Args"":[]}}";
+            @"{
+  ""Description"": ""Hello!"",
+  ""Open"": false,
+  ""Keys"": [],
+  ""DistinguishLR"": true,
+  ""Commands"": [
+    {
+      ""Open"": false,
+      ""CommandType"": ""OpenFile"",
+      ""Command"": {
+        ""Args"": []
+      }
+    }
+  ]
+}
+";
 
         static AppFileManager()
         {
