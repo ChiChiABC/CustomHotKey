@@ -88,6 +88,8 @@ namespace CustomHotKey.Models
             {
                 bool keysIsInNowPressKey = true;
 
+                if (jsonData == null) return;
+
                 foreach (var x in jsonData.Keys)
                 {
                     if (!keysIsInNowPressKey)
@@ -127,9 +129,15 @@ namespace CustomHotKey.Models
                 && !this.recordHotKeyState
                 && this.jsonData.Open == true)
                 {
-                    jsonData.Command.Invoke();
+                    // 执行逻辑
+                    foreach (HotKeyCommandItem item in JSONData.Commands)
+                    {
+                        if (item.Open)
+                        {
+                            item.Command.Invoke();
+                        }
+                    }
                 }
-
             });
             RecordHotKeyFunction = new Action<int, IntPtr, KeyBoardTool.KeyStruct>((i, wp, ip) =>
             {
@@ -164,37 +172,6 @@ namespace CustomHotKey.Models
         ~HotKey() { KeyBoardTool.HotKeyFunctions -= HotKeyFunction; KeyBoardTool.HotKeyFunctions -= RecordHotKeyFunction; }
 
         /// <summary>
-        /// 更新JSON命令
-        /// </summary>
-        /// <param name="hk">要更新命令的JSON对象</param>
-        /// <param name="clearOldArgs">指示是否覆盖旧的参数</param>
-        public static void UpdateJSONCommand(HotKeyJSON hk, bool clearOldArgs = true)
-        {
-
-            if (hk == null) return;    
-
-            Type t = null;
-
-            // 遍历HotKeyCommand的命令列表，实例化一个与hk.CommandType相同Name的Type
-
-            for (int i = 0; i < HotKeyCommand.CommandTypes.Length; i++)
-            {
-                if (hk.CommandType == HotKeyCommand.CommandTypes[i].Name)
-                {
-                    t = HotKeyCommand.CommandTypes[i];
-                }
-            }
-
-            if (!clearOldArgs)
-            {
-                hk.Command = (HotKeyCommand)Activator.CreateInstance(t, hk.Command.Args);
-            }
-            else hk.Command = (HotKeyCommand)Activator.CreateInstance(t, new List<string>());
-
-
-        }
-
-        /// <summary>
         /// 加载JSON数据，用于初始化
         /// </summary>
         public void LoadJSONData()
@@ -202,7 +179,6 @@ namespace CustomHotKey.Models
             string data = System.IO.File.ReadAllText(this.path);
 
             this.jsonData = JsonConvert.DeserializeObject<HotKeyJSON>(data);
-            UpdateJSONCommand(this.jsonData, false);
 
             SaveJSONData();
         }
@@ -251,16 +227,8 @@ namespace CustomHotKey.Models
             /// </remarks>
             public bool DistinguishLR { get; set; }
 
-            /// <summary>
-            /// 命令的类型，如OpenFile、RuncCommand...
-            /// </summary>
-            public string CommandType { get; set; }
 
-            /// <summary>
-            /// 命令的实例，转化成JSON后内部仅剩<see cref="HotKeyCommand.Args"/>属性，
-            /// 所有<see cref="HotKeyCommand"/>的派生类都要从<see cref="HotKeyCommand.Args"/>来读取/保存信息
-            /// </summary>
-            public HotKeyCommand Command { get; set; }
+            public ObservableCollection<HotKeyCommandItem> Commands { get; set; }
         }
     }
 }

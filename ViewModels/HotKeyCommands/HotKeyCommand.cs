@@ -10,12 +10,6 @@ namespace CustomHotKey.ViewModels.HotKeyCommands
     /// </summary>
     public class HotKeyCommand : ObservableObject
     {
-        public static Type[] CommandTypes { get; set; } = new Type[]
-        {
-            typeof(OpenFile),
-            typeof(RunCommand),
-            typeof(KeyMap),
-        };
 
         /// <summary>
         /// 热键的Command实例要进行读取、写入时，必须对<see cref="HotKeyCommand.Args"进行操作/>
@@ -29,6 +23,7 @@ namespace CustomHotKey.ViewModels.HotKeyCommands
 
         public HotKeyCommand(List<string> args)
         {
+            if (args == null) { args = new List<string>(); }
             Args = args;
         }
     }
