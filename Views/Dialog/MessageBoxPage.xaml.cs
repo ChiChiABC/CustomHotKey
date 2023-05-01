@@ -37,7 +37,10 @@ namespace CustomHotKey.Views.Dialog
 
             DialogMessage.Receive += (object sender, ReceiveEventArgs e) =>
             {
-
+                // e.Args[0] 类型，有Input和Message
+                // e.Args[1] Input为标题, Message为信息
+                // e.Args[2] 图标，填写\Resources\Icon\Icon.xaml中图标的key属性
+                // e.Args[3] & e.Args[4] 按钮文字，[3]为确定按钮的文字，[4]为取消按钮的文字
 
                 this.ok.Content = Lang.text_ok;
                 this.cancel.Content = Lang.text_cancel;
