@@ -1,0 +1,183 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:CustomHotKey.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="700"
+		xmlns:i="using:Avalonia.Xaml.Interactivity"
+        x:Class="CustomHotKey.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="CustomHotKey" RequestedThemeVariant="{Binding #ThemeMenuItem.SelectedValue}">
+
+	<Design.DataContext>
+		<!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+		<vm:MainWindowViewModel/>
+	</Design.DataContext>
+
+	<Grid RowDefinitions="32, *">
+
+		<Menu BorderBrush="{DynamicResource ThemeBorderHighBrush}">
+			<MenuItem Header="File (_F)">
+				<MenuItem Header="Change WorkDirectory (_C)" Command="{Binding ChangeWorkDirectoryCommand}" CommandParameter="{Binding $self}"/>
+				<MenuItem Header="Add HotKeyGroup (_A)" Command="{Binding AddHotKeyGroupCommand}"/>
+				<MenuItem Header="SaveAll (_S)" Command="{Binding SaveAllCommand}"/>
+			</MenuItem>
+			<MenuItem x:Name="ThemeMenuItem" Header="Theme (_T)" SelectedValueBinding="{Binding Header}">
+				<MenuItem Header="Default"/>
+				<MenuItem Header="Dark"/>
+				<MenuItem Header="Light"/>
+			</MenuItem>
+		</Menu>
+		<Grid Grid.Row="1" ColumnDefinitions="200, *">
+			<Grid.Styles>
+				<Style Selector=":is(TextBox)">
+					<Setter Property="VerticalContentAlignment" Value="Center"/>
+				</Style>
+				<Style Selector=":is(ContentControl)">
+					<Setter Property="VerticalContentAlignment" Value="Center"/>
+					<Setter Property="HorizontalContentAlignment" Value="Center"/>
+				</Style>
+			</Grid.Styles>
+			<Grid RowDefinitions="40, *">
+				<TextBox Margin="8, 8, 0, 0" Watermark="Search" Text="{Binding SearchValue, Mode=OneWayToSource}"/>
+				<ListBox x:Name="GroupsList" ItemsSource="{Binding SearchResult}" SelectedItem="{Binding SelectedHotKeyGroup}"
+						 Grid.Row="1"  Margin="8, 8, 0, 8">
+					<ListBox.ContextMenu>
+						<ContextMenu>
+							<MenuItem Header="AddHotKeyGroup" Command="{Binding AddHotKeyGroupCommand}"/>
+							<MenuItem Header="RemoveHotKeyGroup" Command="{Binding RemoveHotKeyGroupCommand}"
+									  CommandParameter="{Binding $parent[ListBox].SelectedItem}"/>
+						</ContextMenu>
+					</ListBox.ContextMenu>
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<Grid RowDefinitions="24, *" >
+								<TextBlock Text="{Binding Name}" FontSize="16" FontWeight="Bold"/>
+								<TextBlock Grid.Row="1" Text="{Binding Description}" FontSize="12"/>
+								<Rectangle Width="200"/>
+							</Grid>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+
+			</Grid>
+			<Grid Grid.Column="1" RowDefinitions="100, 80, *" Margin="8">
+				<StackPanel Spacing="8" HorizontalAlignment="Stretch">
+					<TextBlock Text="{Binding SelectedHotKeyGroup.ChkFile.FullName}" FontSize="12" Height="16"/>
+					<TextBox Watermark="Name" Height="32" FontSize="14" Text="{Binding SelectedHotKeyGroup.Name}"/>
+					<TextBox Watermark="Description" Height="32" FontSize="14" Text="{Binding SelectedHotKeyGroup.Description}"/>
+				</StackPanel>
+
+				<StackPanel Margin="0, 8" Spacing="8" Grid.Row="1" Height="80" VerticalAlignment="Top">
+					<StackPanel.Styles>
+						<Style Selector=":is(Control)">
+							<Setter Property="VerticalAlignment" Value="Center"/>
+						</Style>
+					</StackPanel.Styles>
+					<TextBlock Text="HotKeys: "/>
+					<ToggleButton IsChecked="{Binding SelectedHotKeyGroup.IsRecording}" VerticalAlignment="Stretch" MinWidth="48">
+						<ItemsControl IsEnabled="False" ItemsSource="{Binding SelectedHotKeyGroup.HotKeys}">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<StackPanel Orientation="Horizontal" Spacing="8"/>
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Button Content="{Binding}" Height="32" MinWidth="32"/>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</ToggleButton>
+				</StackPanel>
+
+				<Grid Grid.Row="2" RowDefinitions="40, *" ColumnDefinitions="0.5*, 8, *">
+					<GridSplitter Grid.Row="1" Grid.Column="1"/>
+
+					<StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Top">
+						<TextBlock VerticalAlignment="Center" Text="KeyTasks: "/>
+						<SplitButton Height="32" Width="64" Content="+" ToolTip.Tip="Add KeyTask" Command="{Binding AddKeyTaskCommand}">
+							<SplitButton.Styles>
+								<Style Selector="MenuItem">
+									<Setter Property="Command" Value="{Binding $parent[Window].DataContext.AddKeyTaskCommand}"/>
+									<Setter Property="CommandParameter" Value="{Binding Name}"/>
+								</Style>
+							</SplitButton.Styles>
+							<SplitButton.Flyout>
+								<MenuFlyout ItemsSource="{Binding TaskTypes}">
+									<MenuFlyout.ItemTemplate>
+										<DataTemplate>
+											<TextBlock Text="{Binding Name}"/>
+										</DataTemplate>
+									</MenuFlyout.ItemTemplate>
+								</MenuFlyout>
+							</SplitButton.Flyout>
+						</SplitButton>
+						<Button Content="-" Width="{Binding $self.Height}" Height="32"
+							Command="{Binding RemoveKeyTaskCommand}"
+							CommandParameter="{Binding #KeyTasksListBox.SelectedItem}"/>
+					</StackPanel>
+
+					<StackPanel Grid.Column="1" Orientation="Horizontal"  VerticalAlignment="Top">
+						<StackPanel.Styles>
+							<Style Selector=":is(Button)">
+								<Setter Property="Height" Value="32"/>
+								<Setter Property="Width" Value="32"/>
+							</Style>
+						</StackPanel.Styles>
+						<TextBlock Grid.Column="2" Text="Args: " VerticalAlignment="Center"/>
+						<Button Content="+" Command="{Binding AddKeyTaskArgCommand}" 
+								CommandParameter="{Binding #KeyTasksListBox.SelectedItem}"/>
+						<Button Content="-" Command="{Binding RemoveKeyTaskArgCommand}" 
+								CommandParameter="{Binding #ArgsListBox.SelectedItem}"/>
+					</StackPanel>
+					
+					
+					<Grid Grid.Row="1" Grid.Column="0">
+						<ListBox x:Name="KeyTasksListBox" ItemsSource="{Binding SelectedHotKeyGroup.KeyTasks}">
+							<ListBox.ContextMenu>
+								<ContextMenu>
+									<MenuItem Header="Add KeyTask" x:Name="AddKeyTaskMenuItem" ItemsSource="{Binding TaskTypes}">
+										<MenuItem.Styles>
+											<Style Selector="#AddKeyTaskMenuItem > MenuItem">
+												<Setter Property="Command"
+														Value="{Binding $parent[Window].DataContext.AddKeyTaskCommand}"/>
+												<Setter Property="CommandParameter" Value="{Binding Name}"/>
+												<Setter Property="Header" Value="{Binding Name}"/>
+											</Style>
+										</MenuItem.Styles>
+									</MenuItem>
+									<MenuItem Header="Remove KeyTask"
+											  Command="{Binding RemoveKeyTaskCommand}"
+											  CommandParameter="{Binding #KeyTasksListBox.SelectedItem}"/>
+								</ContextMenu>
+							</ListBox.ContextMenu>
+						</ListBox>
+					</Grid>
+					<Grid Grid.Row="1" Grid.Column="2">
+						<ListBox x:Name="ArgsListBox" ItemsSource="{Binding #KeyTasksListBox.SelectedItem.Args}">
+							<ListBox.ContextMenu>
+								<ContextMenu>
+									<MenuItem Header="Add Arg"
+										  Command="{Binding AddKeyTaskArgCommand}"
+										  CommandParameter="{Binding #KeyTasksListBox.SelectedItem}"/>
+									<MenuItem Header="Remove Arg" Command="{Binding RemoveKeyTaskArgCommand}" 
+											  CommandParameter="{Binding #ArgsListBox.SelectedItem}"/>
+								</ContextMenu>
+							</ListBox.ContextMenu>
+							<ListBox.ItemTemplate>
+								<DataTemplate>
+									<Grid HorizontalAlignment="Left">
+										<TextBox Text="{Binding ArgValue}"/>
+									</Grid>
+								</DataTemplate>
+							</ListBox.ItemTemplate>
+						</ListBox>
+					</Grid>
+				</Grid>
+			</Grid>
+		</Grid>
+	</Grid>
+</Window>
