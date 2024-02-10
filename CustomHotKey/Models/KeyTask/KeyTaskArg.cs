@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CustomHotKey.Models.KeyTask
 {
-    public class KeyTaskArg
+    [ObservableObject]
+    public partial class KeyTaskArg
     {
-        public string? ArgValue { get; set; } = "";
+        [ObservableProperty]
+        private string? argValue = "";
 
         public static implicit operator string(KeyTaskArg arg)
         {

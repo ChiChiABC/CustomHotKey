@@ -62,8 +62,11 @@ namespace CustomHotKey.ViewModels
                     SelectedHotKeyGroup.KeyTasks.Add(new RunCommand());
                 } else
                 {
+                    var task = (IKeyTask)Activator
+                        .CreateInstance(KeyTask.TaskTypes.ToList().Find(x => x.Name == taskTypeName));
+                    task.InitView();
                     SelectedHotKeyGroup.KeyTasks
-                .Add((IKeyTask)Activator.CreateInstance(KeyTask.TaskTypes.ToList().Find(x => x.Name == taskTypeName)));
+                        .Add(task);
                 }
             }
             catch (Exception) { }
