@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="CustomHotKey/Models/KeyTask/TaskView/OpenFileTaskView.axaml" value="CustomHotKey/CustomHotKey.csproj" />
+        <entry key="CustomHotKey/Models/KeyTask/TaskView/RunCommandTaskView.axaml" value="CustomHotKey/CustomHotKey.csproj" />
+        <entry key="CustomHotKey/Views/MainWindow.axaml" value="CustomHotKey/CustomHotKey.csproj" />
+      </map>
+    </option>
+  </component>
+</project>

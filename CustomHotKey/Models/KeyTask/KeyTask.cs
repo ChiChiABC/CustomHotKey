@@ -36,6 +36,7 @@ namespace CustomHotKey.Models.KeyTask
                     IKeyTask KeyTask = (IKeyTask)Activator.CreateInstance(TaskTypes.First(x => x.Name == taskType));
                     KeyTask.Args.Clear();
                     KeyTask.Args = args;
+                    KeyTask.InitView();
                     tasks.Add(KeyTask);
                 }
                 catch (Exception) { }

@@ -5,12 +5,19 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CustomHotKey.Models.KeyTask.TaskView;
 
 namespace CustomHotKey.Models.KeyTask
 {
     public class OpenFile : IKeyTask
     {
+        public ITaskView? View { get; set; }
         public ObservableCollection<KeyTaskArg> Args { get; set; } = new();
+
+        public void InitView()
+        {
+            
+        }
 
         public void Execute()
         {
@@ -22,6 +29,11 @@ namespace CustomHotKey.Models.KeyTask
                 }
                 catch (Exception) { }
             }
+        }
+
+        public override string ToString()
+        {
+            return typeof(OpenFile).Name;
         }
     }
 }

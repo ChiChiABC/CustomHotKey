@@ -6,6 +6,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Avalonia.Controls;
+using CustomHotKey.Models.KeyTask.TaskView;
+using Newtonsoft.Json;
 
 namespace CustomHotKey.Models.KeyTask
 {
@@ -13,6 +16,14 @@ namespace CustomHotKey.Models.KeyTask
     {
 
         public ObservableCollection<KeyTaskArg> Args { get; set; } = new() { "echo hello" };
+
+        [JsonIgnore]
+        public ITaskView? View { get; set; } = null;
+
+        public void InitView()
+        {
+            View = new RunCommandTaskView(this);
+        }
 
         public void Execute()
         {
