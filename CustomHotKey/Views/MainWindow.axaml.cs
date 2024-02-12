@@ -10,6 +10,11 @@ namespace CustomHotKey.Views
         public MainWindow()
         {
             InitializeComponent();
+            this.Closing += (s, e) =>
+            {
+                e.Cancel = true;
+                this.Hide();
+            };
         }
     }
 }

@@ -1,4 +1,6 @@
+using System;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
@@ -10,6 +12,7 @@ namespace CustomHotKey
 {
     public partial class App : Application
     {
+        private Window mainWindow;
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
@@ -26,9 +29,20 @@ namespace CustomHotKey
                 {
                     DataContext = new MainWindowViewModel(),
                 };
+                mainWindow = desktop.MainWindow;
             }
 
             base.OnFrameworkInitializationCompleted();
+        }
+
+        private void NativeMenuItem_OnClick(object? sender, EventArgs e)
+        {
+            Environment.Exit(0);
+        }
+
+        private void NativeMenuItem_OnClick2(object? sender, EventArgs e)
+        {
+            mainWindow.Show();
         }
     }
 }
