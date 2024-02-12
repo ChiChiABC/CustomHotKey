@@ -1,6 +1,7 @@
 using System;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
@@ -36,7 +37,8 @@ public partial class OpenFileTaskView : UserControl, ITaskView
                     catch (Exception) {}
                 }
     }
-    private void Button_OnClick(object? sender, RoutedEventArgs e) => ChangeArg();
+
+    private void InputElement_OnDoubleTapped(object? sender, TappedEventArgs e) => ChangeArg();
 
     private void MenuItem_OnClick(object? sender, RoutedEventArgs e) => ChangeArg();
 }

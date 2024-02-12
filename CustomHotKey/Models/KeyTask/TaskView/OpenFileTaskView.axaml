@@ -9,9 +9,8 @@
              SelectedItem="{Binding  $parent[UserControl].SelectedArg, Mode=OneWayToSource}">
         <ListBox.ItemTemplate>
             <DataTemplate>
-                <Grid ColumnDefinitions="*, 100">
-                    <TextBox Text="{Binding ArgValue}"/>
-                    <Button Grid.Column="1" Content="Change" Click="Button_OnClick" HorizontalAlignment="Stretch"/>
+                <Grid>
+                    <TextBox Text="{Binding ArgValue}" DoubleTapped="InputElement_OnDoubleTapped"/>
                 </Grid>
             </DataTemplate>
         </ListBox.ItemTemplate>
