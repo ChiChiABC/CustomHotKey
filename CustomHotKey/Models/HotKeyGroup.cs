@@ -108,9 +108,12 @@ namespace CustomHotKey.Models
 
         private void Execute()
         {
-            foreach (var keyTask in KeyTasks)
+            if (!IsRecording)
             {
-                keyTask.Execute();
+                foreach (var keyTask in KeyTasks)
+                {
+                    keyTask.Execute();
+                }
             }
         }
 
