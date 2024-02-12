@@ -5,8 +5,12 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="CustomHotKey.Models.KeyTask.TaskView.RunCommandTaskView" 
              HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-    <Grid>
-        <ListBox ItemsSource="{Binding Args}" 
+    <Grid RowDefinitions="32, *">
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="ShowCommandWindow: " VerticalAlignment="Center"/>
+            <ToggleSwitch IsChecked="{Binding ShowCommandWindow}" VerticalAlignment="Center"/>
+        </StackPanel>
+        <ListBox Grid.Row="1" ItemsSource="{Binding Args}" 
                  SelectedItem="{Binding $parent[UserControl].SelectedArg, Mode=OneWayToSource}">
             <ListBox.ItemTemplate>
                 <DataTemplate>

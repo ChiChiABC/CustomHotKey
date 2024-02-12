@@ -17,6 +17,8 @@ namespace CustomHotKey.Models.KeyTask
 
         public ObservableCollection<KeyTaskArg> Args { get; set; } = new() { "echo hello" };
 
+        public bool ShowCommandWindow { get; set; }
+
         [JsonIgnore]
         public ITaskView? View { get; set; } = null;
 
@@ -37,7 +39,14 @@ namespace CustomHotKey.Models.KeyTask
 
             if (OperatingSystem.IsWindows())
             {
-                Process.Start("cmd.exe", "/K" + command);
+                if (ShowCommandWindow)
+                {
+                    Process.Start("cmd.exe", "/K" + command);
+                }
+                else
+                {
+                    Process.Start("cmd.exe", "/C" + command);
+                }
             }
         }
 
