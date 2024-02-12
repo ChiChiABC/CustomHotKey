@@ -27,7 +27,7 @@ namespace CustomHotKey.Models.KeyTask
             {
                 try
                 {
-                    Process.Start(arg);
+                    Process.Start(new ProcessStartInfo(arg) {UseShellExecute = true});
                 }
                 catch (Exception) { }
             }
