@@ -6,7 +6,7 @@
         mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="700"
         x:Class="CustomHotKey.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/CHK_Icon.ico"
         Title="CustomHotKey" RequestedThemeVariant="{Binding #ThemeMenuItem.SelectedValue}">
 
 	<Design.DataContext>
