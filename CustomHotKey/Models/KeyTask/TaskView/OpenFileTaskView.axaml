@@ -16,7 +16,7 @@
         </ListBox.ItemTemplate>
         <ListBox.ContextMenu>
             <ContextMenu>
-                <MenuItem Header="Change File" Click="MenuItem_OnClick"/>
+                <MenuItem Header="{Binding $parent[Window].DataContext.Lang.TaskView_OpenFile_ChangeArg}" Click="MenuItem_OnClick"/>
             </ContextMenu>
         </ListBox.ContextMenu>
     </ListBox>

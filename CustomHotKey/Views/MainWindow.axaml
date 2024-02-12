@@ -18,10 +18,20 @@
 	<Grid RowDefinitions="32, *">
 
 		<Menu BorderBrush="{DynamicResource ThemeBorderHighBrush}">
-			<MenuItem Header="File (_F)">
-				<MenuItem Header="Change WorkDirectory (_C)" Command="{Binding ChangeWorkDirectoryCommand}" CommandParameter="{Binding $self}"/>
-				<MenuItem Header="Add HotKeyGroup (_A)" Command="{Binding AddHotKeyGroupCommand}"/>
-				<MenuItem Header="SaveAll (_S)" Command="{Binding SaveAllCommand}"/>
+			<MenuItem Header="{Binding Lang.Menu_File}">
+				<MenuItem Header="{Binding Lang.Menu_File_ChangeWorkDirectory}" Command="{Binding ChangeWorkDirectoryCommand}" CommandParameter="{Binding $self}"/>
+				<MenuItem Header="{Binding Lang.Menu_File_Add_HotKeyGroup}" Command="{Binding AddHotKeyGroupCommand}"/>
+				<MenuItem Header="{Binding Lang.Menu_File_SaveAll}" Command="{Binding SaveAllCommand}"/>
+			</MenuItem>
+			<MenuItem Header="{Binding Lang.Menu_Language}" 
+			          ItemsSource="{Binding Languages}" 
+			          Command="{Binding ChangeLanguageCommand}" 
+			          CommandParameter="{Binding $self.SelectedValue}">
+				<MenuItem.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding}"/>
+					</DataTemplate>
+				</MenuItem.ItemTemplate>
 			</MenuItem>
 		</Menu>
 		<Grid Grid.Row="1" ColumnDefinitions="200, *">
@@ -60,8 +70,8 @@
 			<Grid Grid.Column="1" RowDefinitions="100, 80, *" Margin="8">
 				<StackPanel Spacing="8" HorizontalAlignment="Stretch">
 					<TextBlock Text="{Binding SelectedHotKeyGroup.ChkFile.FullName}" FontSize="12" Height="16"/>
-					<TextBox Watermark="Name" Height="32" FontSize="14" Text="{Binding SelectedHotKeyGroup.Name}"/>
-					<TextBox Watermark="Description" Height="32" FontSize="14" Text="{Binding SelectedHotKeyGroup.Description}"/>
+					<TextBox Watermark="{Binding Lang.Editor_Name}" Height="32" FontSize="14" Text="{Binding SelectedHotKeyGroup.Name}"/>
+					<TextBox Watermark="{Binding Lang.Editor_Description}" Height="32" FontSize="14" Text="{Binding SelectedHotKeyGroup.Description}"/>
 				</StackPanel>
 
 				<StackPanel Margin="0, 8" Spacing="8" Grid.Row="1" Height="80" VerticalAlignment="Top">
@@ -70,7 +80,7 @@
 							<Setter Property="VerticalAlignment" Value="Center"/>
 						</Style>
 					</StackPanel.Styles>
-					<TextBlock Text="HotKeys: "/>
+					<TextBlock Text="{Binding Lang.Editor_HotKeys}"/>
 					<ToggleButton IsChecked="{Binding SelectedHotKeyGroup.IsRecording}" VerticalAlignment="Stretch" MinWidth="48">
 						<ItemsControl IsEnabled="False" ItemsSource="{Binding SelectedHotKeyGroup.HotKeys}">
 							<ItemsControl.ItemsPanel>
@@ -91,7 +101,7 @@
 					<GridSplitter Grid.Row="1" Grid.Column="1"/>
 
 					<StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Top">
-						<TextBlock VerticalAlignment="Center" Text="KeyTasks: "/>
+						<TextBlock VerticalAlignment="Center" Text="{Binding Lang.Editor_KeyTasks}"/>
 						<SplitButton Height="32" Width="64" Content="+" ToolTip.Tip="Add KeyTask" Command="{Binding AddKeyTaskCommand}">
 							<SplitButton.Styles>
 								<Style Selector="MenuItem">
@@ -121,7 +131,7 @@
 								<Setter Property="Width" Value="32"/>
 							</Style>
 						</StackPanel.Styles>
-						<TextBlock Grid.Column="2" Text="Args: " VerticalAlignment="Center"/>
+						<TextBlock Grid.Column="2" Text="{Binding Lang.Editor_Args}" VerticalAlignment="Center"/>
 						<Button Content="+" Command="{Binding AddKeyTaskArgCommand}" 
 								CommandParameter="{Binding #KeyTasksListBox.SelectedItem}"/>
 						<Button Content="-" Command="{Binding RemoveKeyTaskArgCommand}" 

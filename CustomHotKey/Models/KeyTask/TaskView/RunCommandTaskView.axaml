@@ -7,7 +7,7 @@
              HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
     <Grid RowDefinitions="32, *">
         <StackPanel Orientation="Horizontal">
-            <TextBlock Text="ShowCommandWindow: " VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding $parent[Window].DataContext.Lang.TaskView_RunCommand_ShowCommandWindow}" VerticalAlignment="Center"/>
             <ToggleSwitch IsChecked="{Binding ShowCommandWindow}" VerticalAlignment="Center"/>
         </StackPanel>
         <ListBox Grid.Row="1" ItemsSource="{Binding Args}" 

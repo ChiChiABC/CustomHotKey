@@ -14,6 +14,9 @@ namespace CustomHotKey.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
     {
+        public ObservableCollection<string> Languages { get; set; } = Language.GetLanguages();
+        public Language? Lang { get; set; }
+        
         [ObservableProperty]
         private HotKeyGroup? selectedHotKeyGroup;
 
@@ -39,6 +42,13 @@ namespace CustomHotKey.ViewModels
             {
                 SearchResult.Add(item);
             }
+        }
+
+        [RelayCommand]
+        public void ChangeLanguage(string? languageId)
+        {
+            Lang = Language.LoadFromString(languageId);
+            OnPropertyChanged(nameof(Lang));
         }
 
         [RelayCommand]
@@ -119,6 +129,8 @@ namespace CustomHotKey.ViewModels
 
         public MainWindowViewModel()
         {
+            Lang = Language.LoadFromString("zh_cn");
+            
             Search("");
             KeyManager.Loaded += (s, e) => Search("");
             KeyManager.Listener.KeyDown += (s, e) =>
