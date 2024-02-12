@@ -70,7 +70,9 @@ namespace CustomHotKey.ViewModels
             {
                 if (string.IsNullOrEmpty(taskTypeName))
                 {
-                    SelectedHotKeyGroup.KeyTasks.Add(new RunCommand());
+                    var task = new RunCommand();
+                    task.InitView();
+                    SelectedHotKeyGroup.KeyTasks.Add(task);
                 } else
                 {
                     var task = (IKeyTask)Activator
