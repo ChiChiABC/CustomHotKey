@@ -12,4 +12,5 @@ public partial class RunCommandTaskView : UserControl, ITaskView
     }
     
     public IKeyTask? Task { get; set; }
+    public KeyTaskArg? SelectedArg { get; set; }
 }

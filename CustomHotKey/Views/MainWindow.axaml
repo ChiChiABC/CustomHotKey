@@ -125,7 +125,7 @@
 						<Button Content="+" Command="{Binding AddKeyTaskArgCommand}" 
 								CommandParameter="{Binding #KeyTasksListBox.SelectedItem}"/>
 						<Button Content="-" Command="{Binding RemoveKeyTaskArgCommand}" 
-								CommandParameter="{Binding #ArgsListBox.SelectedItem}"/>
+								CommandParameter="{Binding #TaskView.Content}"/>
 					</StackPanel>
 					
 					
@@ -151,7 +151,7 @@
 						</ListBox>
 					</Grid>
 					<Grid Grid.Row="1" Grid.Column="2">
-						<ContentControl 
+						<ContentControl x:Name="TaskView"
 							HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
 							HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
 							Content="{Binding #KeyTasksListBox.SelectedItem.View}">

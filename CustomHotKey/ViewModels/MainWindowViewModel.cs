@@ -8,6 +8,7 @@ using CustomHotKey.Models.KeyTask;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using CustomHotKey.Models.KeyTask.TaskView;
 
 namespace CustomHotKey.ViewModels
 {
@@ -83,11 +84,12 @@ namespace CustomHotKey.ViewModels
         }
 
         [RelayCommand]
-        public void RemoveKeyTaskArg(KeyTaskArg arg)
+        public void RemoveKeyTaskArg(Control taskView)
         {
             try
             {
-                if (arg == null || SelectedHotKeyGroup == null) return;
+                if (taskView == null || SelectedHotKeyGroup == null) return;
+                var arg = (taskView as ITaskView).SelectedArg;
                 SelectedHotKeyGroup.KeyTasks.ToList().Find(x => x.Args.Contains(arg))
                 .Args.Remove(arg);
             }

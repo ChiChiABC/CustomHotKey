@@ -18,7 +18,8 @@ public partial class OpenFileTaskView : UserControl, ITaskView
     }
 
     public IKeyTask? Task { get; set; }
-    
+    public KeyTaskArg? SelectedArg { get; set; }
+
     private void ChangeArg()
     {
         var file = TopLevel.GetTopLevel(this).StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions()

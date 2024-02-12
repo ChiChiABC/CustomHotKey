@@ -6,12 +6,13 @@
              x:Class="CustomHotKey.Models.KeyTask.TaskView.RunCommandTaskView" 
              HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
     <Grid>
-        <ItemsControl ItemsSource="{Binding Args}">
-            <ItemsControl.ItemTemplate>
+        <ListBox ItemsSource="{Binding Args}" 
+                 SelectedItem="{Binding $parent[UserControl].SelectedArg, Mode=OneWayToSource}">
+            <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBox Text="{Binding ArgValue}"/>
                 </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </UserControl>

@@ -5,7 +5,8 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="CustomHotKey.Models.KeyTask.TaskView.OpenFileTaskView" 
              HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-    <ListBox x:Name="ArgList" ItemsSource="{Binding Args}">
+    <ListBox x:Name="ArgList" ItemsSource="{Binding Args}" 
+             SelectedItem="{Binding  $parent[UserControl].SelectedArg, Mode=OneWayToSource}">
         <ListBox.ItemTemplate>
             <DataTemplate>
                 <Grid ColumnDefinitions="*, 100">
