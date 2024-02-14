@@ -25,6 +25,10 @@ public class Language
     public string? Editor_Args { get; set; }
     public string? TaskView_RunCommand_ShowCommandWindow { get; set; }
     public string? TaskView_OpenFile_ChangeArg { get; set; }
+    public string? ContextMenu_AddHotKeyGroup { get; set; }
+    public string? ContextMenu_RemoveHotKeyGroup { get; set; }
+    public string? Editor_ContextMenu_AddKeyTask { get; set; }
+    public string? Editor_ContextMenu_RemoveKeyTask { get; set; }
 
     public static ObservableCollection<string> GetLanguages()
     {
@@ -75,7 +79,11 @@ public class Language
     ""Editor_KeyTasks"": ""按键任务: "",
     ""Editor_Args"": ""任务参数: "",
     ""TaskView_RunCommand_ShowCommandWindow"": ""显示命令窗口: "",
-    ""TaskView_OpenFile_ChangeArg"": ""选择文件""
+    ""TaskView_OpenFile_ChangeArg"": ""选择文件"",
+    ""ContextMenu_AddHotKeyGroup"": ""添加热键组"",
+    ""ContextMenu_RemoveHotKeyGroup"": ""移除热键组"",
+    ""Editor_ContextMenu_AddKeyTask"": ""添加热键任务"",
+    ""Editor_ContextMenu_RemoveKeyTask"": ""移除热键任务""
 }
             ";
             info.Create();
