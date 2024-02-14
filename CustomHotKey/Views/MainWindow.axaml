@@ -6,17 +6,16 @@
         mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="700"
         x:Class="CustomHotKey.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="CustomHotKey" RequestedThemeVariant="{Binding #ThemeMenuItem.SelectedValue}">
+        Icon="/Assets/CHK_Icon.ico"
+        Title="CustomHotKey" >
 
 	<Design.DataContext>
 		<!-- This only sets the DataContext for the previewer in an IDE,
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
 		<vm:MainWindowViewModel/>
 	</Design.DataContext>
-
+	
 	<Grid RowDefinitions="32, *">
-
 		<Menu BorderBrush="{DynamicResource ThemeBorderHighBrush}">
 			<MenuItem Header="{Binding Lang.Menu_File}">
 				<MenuItem Header="{Binding Lang.Menu_File_ChangeWorkDirectory}" Command="{Binding ChangeWorkDirectoryCommand}" CommandParameter="{Binding $self}"/>

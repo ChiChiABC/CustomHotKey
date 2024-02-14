@@ -3,13 +3,26 @@
              x:Class="CustomHotKey.App"
              xmlns:local="using:CustomHotKey"
              RequestedThemeVariant="Default">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+    <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.DataTemplates>
-        <local:ViewLocator/>
+        <local:ViewLocator />
     </Application.DataTemplates>
-  
+    
+    <TrayIcon.Icons>
+        <TrayIcons>
+            <TrayIcon Icon="/Assets/CHK_Icon.ico" 
+                      ToolTipText="Avalonia Tray Icon ToolTip">
+                <TrayIcon.Menu>
+                    <NativeMenu>
+                                <NativeMenuItem Header="退出 Exit" Click="NativeMenuItem_OnClick"/>
+                                <NativeMenuItem Header="显示主窗口 Show MainWindow" Click="NativeMenuItem_OnClick2"/>
+                            </NativeMenu>
+                </TrayIcon.Menu>
+            </TrayIcon>
+        </TrayIcons>
+    </TrayIcon.Icons>
     <Application.Styles>
-        <FluentTheme/>
+        <FluentTheme />
     </Application.Styles>
 </Application>
