@@ -23,15 +23,18 @@
 				<MenuItem Header="{Binding Lang.Menu_File_Add_HotKeyGroup}" Command="{Binding AddHotKeyGroupCommand}"/>
 				<MenuItem Header="{Binding Lang.Menu_File_SaveAll}" Command="{Binding SaveAllCommand}"/>
 			</MenuItem>
-			<MenuItem Header="{Binding Lang.Menu_Language}" 
-			          ItemsSource="{Binding Languages}" 
-			          Command="{Binding ChangeLanguageCommand}" 
-			          CommandParameter="{Binding $self.SelectedValue}">
-				<MenuItem.ItemTemplate>
-					<DataTemplate>
-						<TextBlock Text="{Binding}"/>
-					</DataTemplate>
-				</MenuItem.ItemTemplate>
+			<MenuItem Header="Setting">
+				<MenuItem Header="{Binding Lang.Menu_Language}" 
+				          ItemsSource="{Binding Languages}" 
+				          Command="{Binding ChangeLanguageCommand}" 
+				          CommandParameter="{Binding $self.SelectedValue}">
+					<MenuItem.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding}"/>
+						</DataTemplate>
+					</MenuItem.ItemTemplate>
+				</MenuItem>
+				<MenuItem Header="UnInstall" Command="{Binding UnInstallCommand}"/>
 			</MenuItem>
 		</Menu>
 		<Grid Grid.Row="1" ColumnDefinitions="200, *">

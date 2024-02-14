@@ -9,6 +9,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using CustomHotKey.Models.KeyTask.TaskView;
+using CustomHotKey.Models.UnInstaller;
 
 namespace CustomHotKey.ViewModels
 {
@@ -42,6 +43,12 @@ namespace CustomHotKey.ViewModels
             {
                 SearchResult.Add(item);
             }
+        }
+
+        [RelayCommand]
+        public void UnInstall()
+        {
+            UnInstaller.UnInstall();
         }
 
         [RelayCommand]
